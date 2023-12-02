@@ -18,9 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application( _ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     //        registerDependencies()
 
-    self.registerDependencies()
     let window = UIWindow(frame: UIScreen.main.bounds)
     self.window = window
+
+    self.registerDependencies()
 
     self.appCoordinator = AppRootBuilder().build()
     self.appCoordinator?.launch(window: window)

@@ -28,7 +28,10 @@ extension AppDelegate {
       interface: FetchCharacterUseCaseInterface.self,
       implement: {
         FetchRMCharacterUseCase(
-          repository: container<FetchLocationUseCaseInterface>.resolve()
+          repository: CharacterRepository(
+            characterService: DefaultCharacterService(
+              endPoint: APIComponent(endPoint: .character)
+            )
           )
         )
       }
