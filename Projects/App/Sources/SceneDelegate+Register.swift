@@ -16,6 +16,8 @@ import CharacterInterface
 import Character
 import Location
 import LocationInterface
+import Episode
+import EpisodeInterface
 
 extension AppDelegate {
   var container: DIContainer {
@@ -23,7 +25,9 @@ extension AppDelegate {
   }
 
   func registerDependencies() {
-
+    container.register(
+      interface: FetchEpisodeUseCaseInterface.self,
+      implement: FetchEpisodeUseCase)
     container.register(
       interface: FetchCharacterUseCaseInterface.self,
       implement: {
