@@ -12,7 +12,6 @@ import MyPlugin
 let project = Project.dynamicFramework(
   name: Feature.Network.rawValue,
   dependencies: [
-    .feature(interface: .Character),
-    .feature(interface: .Location),
+    .domain
   ]
 )

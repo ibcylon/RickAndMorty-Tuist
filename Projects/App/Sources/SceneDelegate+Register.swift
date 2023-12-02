@@ -27,7 +27,17 @@ extension AppDelegate {
   func registerDependencies() {
     container.register(
       interface: FetchEpisodeUseCaseInterface.self,
-      implement: FetchEpisodeUseCase)
+      implement: {
+        FetchRMEpisodeUseCase(
+          repository: EpisodeRepository(
+            episodeService: DefaultEpisodeService(
+              endPoint: APIComponent(endPoint: .episode)
+            )
+          )
+        )
+      }
+    )
+
     container.register(
       interface: FetchCharacterUseCaseInterface.self,
       implement: {

@@ -1,3 +1,4 @@
+
 //
 //  Project.swift
 //  Config
@@ -10,15 +11,15 @@ import ProjectDescriptionHelpers
 import MyPlugin
 
 let project = Project(
-  name: Feature.App.rawValue,
+  name: Feature.Domain.rawValue,
   targets: [
-    .makeApp(
-      name: "App",
-      sources: "Sources/**",
+    .feature(
+      implementation: .Domain,
       dependencies: [
-        .feature,
-        .data,
+        .feature(interface: .Episode),
+        .feature(interface: .Character),
+        .feature(interface: .Location),
       ]
-    )
+    ),
   ]
 )
