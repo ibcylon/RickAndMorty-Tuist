@@ -9,6 +9,7 @@ import UIKit
 import Core
 import Character
 import CharacterInterface
+import EpisodeInterface
 
 protocol MainViewControllable {
   var uiViewController: UIViewController { get }
@@ -18,6 +19,7 @@ protocol MainViewControllable {
 final class MainCoordinator: BaseCoordinator, MainCoordinating {
   
   private let characterHome: CharacterBuildable
+  private let episodeHome: EpisodeBuildable
 
   var mainViewControllable: MainViewControllable?
   var delegate: MainCoordinatingDelegate?
@@ -25,10 +27,12 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
   public init(
     navigationController: UINavigationController,
     mainViewControllable: MainViewControllable,
-    characterHome: CharacterBuildable
+    characterHome: CharacterBuildable,
+    episodeHome: EpisodeBuildable
   ) {
     self.mainViewControllable = mainViewControllable
     self.characterHome = characterHome
+    self.episodeHome = episodeHome
     super.init(navigationController:  navigationController)
   }
 
@@ -41,13 +45,17 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
 
   override func start() {
     let characterCoordinator = self.characterHome.build()
+    let episodeCoordinator = self.episodeHome.build()
 
     attachChild(characterCoordinator)
+    attachChild(episodeCoordinator)
 
     characterCoordinator.start()
+    episodeCoordinator.start()
 
     let viewControllers = [
-      characterCoordinator.navigationController
+      characterCoordinator.navigationController,
+      episodeCoordinator.navigationController,
     ]
 
     mainViewControllable?.setViewController(viewControllers)
