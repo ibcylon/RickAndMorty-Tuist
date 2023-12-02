@@ -16,6 +16,7 @@ let project = Project(
         dependencies: [
           .feature(implementation: .Character),
           .feature(implementation: .Location),
+          .feature(implementation: .Episode),
           .module(implementation: .Data, pathName: .Data)
         ]
       )
