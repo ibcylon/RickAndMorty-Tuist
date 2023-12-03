@@ -40,17 +40,17 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
 
 
   override func start() {
-    let characterCoordinator = self.characterHome.build()
-
-    attachChild(characterCoordinator)
-
-    characterCoordinator.start()
-
-    let viewControllers = [
-      characterCoordinator.navigationController
-    ]
-
-    mainViewControllable?.setViewController(viewControllers)
+//    let characterCoordinator = self.characterHome.build()
+//
+//    attachChild(characterCoordinator)
+//
+//    characterCoordinator.start()
+//
+//    let viewControllers = [
+//      characterCoordinator.navigationController
+//    ]
+//
+//    mainViewControllable?.setViewController(viewControllers)
   }
   
 }

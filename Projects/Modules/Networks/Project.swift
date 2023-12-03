@@ -10,7 +10,7 @@ import ProjectDescriptionHelpers
 import MyPlugin
 
 let project = Project.dynamicFramework(
-  name: Feature.Network.rawValue,
+  name: Feature.Networks.rawValue,
   dependencies: [
     .feature(interface: .Character),
     .feature(interface: .Location),

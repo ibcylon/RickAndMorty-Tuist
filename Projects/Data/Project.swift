@@ -16,7 +16,7 @@ let project = Project(
     .feature(
       implementation: .Data,
       dependencies: [
-        .module(implementation: .Network, pathName: .Modules(.Network))
+        .module(implementation: .Networks, pathName: .Modules(.Networks))
       ]
     ),
   ]

@@ -11,7 +11,7 @@ public let infoPlistExtension: [String: InfoPlist.Value] = [
   "CFBundleShortVersionString": "1.0",
   "CFBundleVersion": "1",
   "UILaunchStoryboardName": "LaunchScreen",
-  "CFBundleName": "THT",
+  "CFBundleName": "RickAndMorty",
     "UIApplicationSceneManifest": [
       "UIApplicationSupportsMultipleScenes": false,
       "UISceneConfigurations": [

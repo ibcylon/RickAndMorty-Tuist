@@ -1,6 +1,7 @@
 import ProjectDescription
 import MyPlugin
 
+private let basicDeployment: DeploymentTarget = .iOS(targetVersion: "16.2", devices: .iphone)
 public extension Project {
    static func dynamicFramework(
     name: String,
@@ -11,7 +12,7 @@ public extension Project {
         platform: .iOS,
         product: .framework,
         bundleId: "com.rickandmorty.\(name)",
-        deploymentTarget: .iOS(targetVersion: "16.1", devices: .iphone),
+        deploymentTarget: basicDeployment,
         infoPlist: .default,
         sources: ["Sources/**/*.swift"],
         resources:  [.glob(pattern: .relativeToRoot("Projects/App/Resources/**"))],
@@ -34,7 +35,7 @@ public extension Project {
        platform: .iOS,
        product: product,
        bundleId: "com.rickandmorty.\(name)",
-       deploymentTarget: .iOS(targetVersion: "16.1", devices: .iphone),
+       deploymentTarget: basicDeployment,
        infoPlist: .default,
        sources: ["Sources/**/*.swift"],
        resources:  [.glob(pattern: .relativeToRoot("Projects/App/Resources/**"))],

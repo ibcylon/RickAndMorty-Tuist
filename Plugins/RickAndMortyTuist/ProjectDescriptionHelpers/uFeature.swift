@@ -16,7 +16,7 @@ public enum Feature: String {
   case App = "App"
   case Data = "Data"
 
-  case Network
+  case Networks
   case ThirdPartyLibs
   case DesignSystem
 }
@@ -29,7 +29,7 @@ public enum ModulePath {
   case Modules(ModuleName)
 
   public enum ModuleName: String {
-    case Network
+    case Networks
     case ThirdPartyLibs
     case DesignSystem
   }

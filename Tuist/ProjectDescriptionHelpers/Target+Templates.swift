@@ -8,7 +8,9 @@
 import ProjectDescription
 import MyPlugin
 
-private let rootPackagesName = "com.exampleproject."
+private let rootPackagesName = "com.rickandmorty."
+
+private let basicDeployment: DeploymentTarget = .iOS(targetVersion: "16.2", devices: .iphone)
 
 private func makeBundleID(with addition: String) -> String {
   (rootPackagesName + addition).lowercased()
@@ -25,7 +27,7 @@ public extension Target {
       platform: .iOS,
       product: .app,
       bundleId: makeBundleID(with: "app"),
-      deploymentTarget: .iOS(targetVersion: "16.1", devices: .iphone),
+      deploymentTarget: basicDeployment,
       infoPlist: .extendingDefault(with: infoPlistExtension),
       sources: sources,
       resources:  [.glob(pattern: .relativeToRoot("Projects/App/Resources/**"))],
@@ -44,7 +46,7 @@ public extension Target {
       platform: .iOS,
       product: defaultPackageType,
       bundleId: makeBundleID(with: name + ".framework"),
-      deploymentTarget: .iOS(targetVersion: "16.1", devices: .iphone),
+      deploymentTarget: basicDeployment,
       sources: sources,
       resources: resources,
       dependencies: dependencies
