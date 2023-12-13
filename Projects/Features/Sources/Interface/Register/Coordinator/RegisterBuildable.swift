@@ -6,7 +6,8 @@
 //
 
 import UIKit
+import Core
 
 protocol RegisterBuildable {
-  func build(navigationController: UINavigationController) -> RegisterCoordinating
+  func build(rootViewControllable: ViewControllable) -> RegisterCoordinating
 }

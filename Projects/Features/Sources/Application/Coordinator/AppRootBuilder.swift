@@ -7,6 +7,8 @@
 
 import UIKit
 
+import Core
+
 protocol AppRootBuildable {
   func build() -> LaunchCoordinating
 }
@@ -16,14 +18,12 @@ public final class AppRootBuilder: AppRootBuildable {
 
   public func build() -> LaunchCoordinating {
 
-    let navigationController = UINavigationController()
-    let appCoordinator = AppCoordinator(
-      navigationController: navigationController,
+    let rootViewController = NavigationControllable(rootViewControllable: RMLaunchViewController())
+    return AppCoordinator(
+      rootViewControllable: rootViewController,
       mainBuildable: MainBuilder(),
       registerBuildable: RegisterBuilder()
     )
-
-    return appCoordinator
   }
 }
 

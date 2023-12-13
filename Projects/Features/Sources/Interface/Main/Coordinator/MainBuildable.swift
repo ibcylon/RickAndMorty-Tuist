@@ -6,7 +6,8 @@
 //
 
 import UIKit
+import Core
 
 protocol MainBuildable {
-  func build(navigationController: UINavigationController) -> MainCoordinating
+  func build(rootViewControllable: ViewControllable) -> MainCoordinating
 }

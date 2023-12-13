@@ -13,29 +13,28 @@ protocol AppCoordinating {
   func mainFlow()
 }
 
-final class AppCoordinator: LaunchRouter, AppCoordinating {
+final class AppCoordinator: LaunchCoordinator, AppCoordinating {
 
   private let mainBuildable: MainBuildable
   private let registerBuildable: RegisterBuildable
 
   init(
-    navigationController: UINavigationController,
+    rootViewControllable: ViewControllable,
     mainBuildable: MainBuildable,
     registerBuildable: RegisterBuildable
   ) {
     self.mainBuildable = mainBuildable
     self.registerBuildable = registerBuildable
-    super.init(navigationController: navigationController)
+    super.init(rootViewController: rootViewControllable)
   }
 
   public override func start() {
     mainFlow()
-    print("APpCoordin")
   }
 
   // MARK: - public
   func registerFlow() {
-    let registerCoordinator = self.registerBuildable.build(navigationController: self.navigationController)
+    let registerCoordinator = self.registerBuildable.build(rootViewControllable: self.viewControllable)
     attachChild(registerCoordinator)
     registerCoordinator.delegate = self
 
@@ -43,7 +42,8 @@ final class AppCoordinator: LaunchRouter, AppCoordinating {
   }
 
   func mainFlow() {
-    let mainCoordinator = mainBuildable.build(navigationController: self.navigationController)
+    let mainCoordinator = mainBuildable.build(rootViewControllable: self.viewControllable)
+
     attachChild(mainCoordinator)
     mainCoordinator.delegate = self
     

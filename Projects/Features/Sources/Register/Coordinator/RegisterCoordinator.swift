@@ -14,13 +14,10 @@ final class RegisterCoordinator: BaseCoordinator, RegisterCoordinating {
 
   var delegate: RegisterCoordinatingDelegate?
 
-  func attachRegister() {
-    start()
-  }
-
   override func start() {
-    let viewController = RegisterViewController()
-    self.navigationController.viewControllers = [viewController]
-//    self.navigationController.pushViewController(viewController, animated: true)
+    attachRegister()
+  }
+  func attachRegister() {
+    
   }
 }

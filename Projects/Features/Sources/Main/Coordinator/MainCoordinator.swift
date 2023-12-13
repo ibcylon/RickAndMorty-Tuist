@@ -10,47 +10,45 @@ import Core
 import Character
 import CharacterInterface
 
-protocol MainViewControllable {
-  var uiViewController: UIViewController { get }
-  func setViewController(_ viewControllers: [UIViewController])
+protocol MainViewControllable: ViewControllable {
+  func setViewController(_ viewControllers: [ViewControllable])
 }
 
 final class MainCoordinator: BaseCoordinator, MainCoordinating {
   
   private let characterHome: CharacterBuildable
 
-  var mainViewControllable: MainViewControllable?
+  var mainViewControllable: MainViewControllable
   var delegate: MainCoordinatingDelegate?
   
   public init(
-    navigationController: UINavigationController,
+    rootViewControllable: ViewControllable,
     mainViewControllable: MainViewControllable,
     characterHome: CharacterBuildable
   ) {
+
+    rootViewControllable.setViewControllers([mainViewControllable])
+    
     self.mainViewControllable = mainViewControllable
     self.characterHome = characterHome
-    super.init(navigationController:  navigationController)
+    super.init(rootViewController: mainViewControllable)
+  }
+
+  override func start() {
+    attachTab()
   }
 
   func attachTab() {
-    start()
-    guard let viewController = mainViewControllable?.uiViewController else { return }
-    self.navigationController.viewControllers = [ viewController ]
-  }
+    let characterCoordinator = self.characterHome.build(rootViewControllable: NavigationControllable())
 
+    attachChild(characterCoordinator)
+    characterCoordinator.viewControllable.uiController.tabBarItem = .makeTabItem(.character)
+    characterCoordinator.start()
 
-  override func start() {
-//    let characterCoordinator = self.characterHome.build()
-//
-//    attachChild(characterCoordinator)
-//
-//    characterCoordinator.start()
-//
-//    let viewControllers = [
-//      characterCoordinator.navigationController
-//    ]
-//
-//    mainViewControllable?.setViewController(viewControllers)
+    let viewControllers = [
+      characterCoordinator.viewControllable
+    ]
+
+    mainViewControllable.setViewController(viewControllers)
   }
-  
 }
