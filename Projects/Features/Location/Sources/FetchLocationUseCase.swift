@@ -21,16 +21,16 @@ public final class FetchRMLocationUseCase: FetchLocationUseCaseInterface {
   public func fetchAllLocations(page: Int) -> Observable<RMLocationInfo> {
     repository.fetchAllLocations(page: page)
   }
-
-  public func fetchLocationByID(ids: [Int]) -> Observable<[RMLocation]> {
-    repository.fetchLocationByID(ids: ids)
-  }
+//
+//  public func fetchLocationByID(ids: [Int]) -> Observable<[RMLocation]> {
+//    repository.fetchLocationByID(ids: ids)
+//  }
 
   public func fetchSingleLocationByID(id: Int) -> Observable<RMLocation> {
     repository.fetchSingleLocationByID(id: id)
   }
-
-  public func fetchLocationsByFilter(filter: RMLocationFilter, page: Int) -> Observable<RMLocationInfo> {
-    repository.fetchLocationsByFilter(filter: filter, page: page)
-  }
+//
+//  public func fetchLocationsByFilter(filter: RMLocationFilter, page: Int) -> Observable<RMLocationInfo> {
+//    repository.fetchLocationsByFilter(filter: filter, page: page)
+//  }
 }

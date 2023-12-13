@@ -10,7 +10,7 @@ import RxSwift
 
 public protocol LocationRepositoryInterface {
   func fetchAllLocations(page: Int) -> Observable<RMLocationInfo>
-  func fetchLocationByID(ids: [Int]) -> Observable<[RMLocation]>
+//  func fetchLocationByID(ids: [Int]) -> Observable<[RMLocation]>
   func fetchSingleLocationByID(id: Int) -> Observable<RMLocation>
-  func fetchLocationsByFilter(filter: RMLocationFilter, page: Int) -> Observable<RMLocationInfo>
+//  func fetchLocationsByFilter(filter: RMLocationFilter, page: Int) -> Observable<RMLocationInfo>
 }

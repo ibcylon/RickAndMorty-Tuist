@@ -6,16 +6,15 @@
 //
 
 import Foundation
+import CharacterInterface
 
 public struct RMLocationInfo: Codable {
-  let info: Info
-  let results: [RMLocation]
-}
+  public let info: Info
+  public let results: [RMLocation]
 
-struct Info: Codable {
-  let count: Int
-  let pages: Int
-  let next: String?
-  let prev: String?
+  public init(info: Info, results: [RMLocation]) {
+    self.info = info
+    self.results = results
+  }
 }
 
