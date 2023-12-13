@@ -16,6 +16,7 @@ let project = Project(
       implementation: .Core,
       dependencies: [
         .module(implementation: .ThirdPartyLibs, pathName: .Modules(.ThirdPartyLibs)),
+        .module(implementation: .Networks, pathName: .Modules(.Networks)),
       ]
     ),
   ]

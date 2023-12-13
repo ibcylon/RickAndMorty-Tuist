@@ -8,7 +8,7 @@
 import UIKit
 
 public protocol Coordinator: AnyObject {
-  var navigationController: UINavigationController { get }
+  var viewControllable: ViewControllable { get }
   var childCoordinators: [Coordinator] { get set }
 
   func start()
@@ -17,11 +17,17 @@ public protocol Coordinator: AnyObject {
 }
 
 open class BaseCoordinator: Coordinator {
-  public let navigationController: UINavigationController
+  public let viewControllable: ViewControllable
   public var childCoordinators: [Coordinator]
-  public init(navigationController: UINavigationController) {
-    self.navigationController = navigationController
+  public init(rootViewController: ViewControllable) {
+    self.viewControllable = rootViewController
     self.childCoordinators = []
+
+    RMLogger.ui.debug("\(#function) \(type(of: self))")
+  }
+
+  deinit {
+    RMLogger.ui.debug("\(#function) \(type(of: self))")
   }
 
   open func start() {
