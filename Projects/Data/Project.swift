@@ -16,7 +16,10 @@ let project = Project(
     .feature(
       implementation: .Data,
       dependencies: [
-        .module(implementation: .Networks, pathName: .Modules(.Networks))
+        .core,
+        .feature(interface: .Character),
+        
+        .module(implementation: .ThirdPartyLibs, pathName: .Modules(.ThirdPartyLibs)),
       ]
     ),
   ]
