@@ -48,15 +48,30 @@ class AuthenticatedHTTPClientDecorator: HTTPClient {
     }
   }
 }
-struct InvalidHTTPResponseError: Error {}
+public enum RemoteError: Error {
+  case invalidResponse(Int?)
+  case decode
+  case unknown
+}
+
+public struct InvalidHTTPResponseError: Error {
+  public init() { }
+}
+
+public struct InvalidDecodedError: Error {
+  public init() { }
+}
 
 extension URLSession: HTTPClient {
 
   public func perform(_ request: URLRequest, completion: @escaping (Result<(Data, HTTPURLResponse), Error>) -> Void) {
-    print(request.description)
+
     let task = dataTask(with: request) { data, response, error in
-      guard let data = data, let httpResponse = response as? HTTPURLResponse else {
-        completion(.failure(InvalidHTTPResponseError()))
+      guard
+        let data = data,
+        let httpResponse = response as? HTTPURLResponse
+      else {
+        completion(.failure(RemoteError.unknown))
         return
       }
       completion(.success((data, httpResponse)))

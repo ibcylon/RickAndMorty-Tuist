@@ -28,7 +28,11 @@ public struct APIComponent {
     Constant.baseURLString + "/" + endPoint.rawValue
   }
 
-  var url: URL {
+  public var url: URL {
     URL(string: urlString)!
+  }
+
+  public func url(id: Int) -> URL {
+    URL(string: urlString + "/\(id)")!
   }
 }

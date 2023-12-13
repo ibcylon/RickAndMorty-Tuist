@@ -7,37 +7,37 @@
 
 import Foundation
 
-protocol Request {
+public protocol Request {
   func request() -> URLRequest
 }
 
-struct RequestWithURL: Request {
+public struct RequestWithURL: Request {
   private let url: URL
 
-  init(url: URL) {
+  public init(url: URL) {
     self.url = url
   }
 
-  func request() -> URLRequest {
+  public func request() -> URLRequest {
     return URLRequest(url: url)
   }
 }
 
-struct POSTRequest: Request {
+public struct POSTRequest: Request {
   private let base: Request
 
   init(base: Request) {
     self.base = base
   }
 
-  func request() -> URLRequest {
+  public func request() -> URLRequest {
     var request = base.request()
     request.httpMethod = "POST"
     return request
   }
 }
 
-struct BearerRequest: Request {
+public struct BearerRequest: Request {
   private let base: Request
   private let token: String
 
@@ -46,14 +46,14 @@ struct BearerRequest: Request {
     self.token = token
   }
 
-  func request() -> URLRequest {
+  public func request() -> URLRequest {
     var request = base.request()
     request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     return request
   }
 }
 
-struct RequestWithBody: Request {
+public struct RequestWithBody: Request {
   private let base: Request
   private let data: Data
 
@@ -62,7 +62,7 @@ struct RequestWithBody: Request {
     self.data = data
   }
 
-  func request() -> URLRequest {
+  public func request() -> URLRequest {
     var request = base.request()
     request.httpBody = data
 
@@ -70,7 +70,7 @@ struct RequestWithBody: Request {
   }
 }
 
-struct RequestWithQuery: Request {
+public struct RequestWithQuery: Request {
   private let base: Request
   private let query: [URLQueryItem]
 
@@ -79,7 +79,7 @@ struct RequestWithQuery: Request {
     self.query = query
   }
 
-  func request() -> URLRequest {
+  public func request() -> URLRequest {
     var request = base.request()
 
     request.url?.append(queryItems: query)
@@ -87,7 +87,7 @@ struct RequestWithQuery: Request {
   }
 }
 
-struct RequestWithPath: Request {
+public struct RequestWithPath: Request {
   private let base : Request
   private let path: [String]
 
@@ -96,7 +96,7 @@ struct RequestWithPath: Request {
     self.path = path
   }
 
-  func request() -> URLRequest {
+  public func request() -> URLRequest {
     var request = base.request()
     path.forEach { item in
       request.url?.append(path: item)
