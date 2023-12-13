@@ -8,33 +8,43 @@
 import UIKit
 import SnapKit
 import RxSwift
+import RxCocoa
+import Core
 
-final class CharacterDetailViewController: UIViewController {
-  private var disposeBag = DisposeBag()
+final class CharacterDetailViewController: RMBaseViewController {
+
+  private let mainView = RMCharacterDetailView()
 
   var viewModel: CharacterDetailViewModel!
 
-  deinit { }
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    setUpViews()
-    bind()
+  var button = UIButton()
+  override func loadView() {
+    self.view = mainView
   }
 
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-  }
 
-  private func setUpViews() {
+  override func makeUI() {
     self.view.backgroundColor = .white
-
-    self.title = "CharactersDetail"
     self.navigationController?.navigationBar.prefersLargeTitles = false
   }
 
-  func bind() {
+  override func bindViewModel() {
+    let input = CharacterDetailViewModel.Input(
+      onAppear: self.rx.viewWillAppear.map { _ in }
+        .asDriver(onErrorJustReturn: ()),
+      backButtonTap: self.button.rx.tap.asDriver()
+    )
 
+    let output = viewModel.transform(input: input)
+
+    output.item
+      .drive(onNext: { [weak self] item in
+        self?.mainView.bind(item: item)
+        self?.title = item.name
+      })
+      .disposed(by: disposeBag)
+    output.route
+      .drive()
+      .disposed(by: disposeBag)
   }
 }

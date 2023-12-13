@@ -1,5 +1,6 @@
 import UIKit
+import Core
 
 public protocol CharacterBuildable {
-  func build() -> CharacterCoordinating
+  func build(rootViewControllable: ViewControllable) -> CharacterCoordinating
 }

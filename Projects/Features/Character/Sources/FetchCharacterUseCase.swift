@@ -21,4 +21,7 @@ public final class FetchRMCharacterUseCase: FetchCharacterUseCaseInterface {
   public func fetchAllCharacters(page: Int) -> Observable<RMCharacterInfo> {
     repository.fetchAllCharacters(page: page)
   }
+  public func fetchSingleCharacterByID(id: Int) -> Observable<RMCharacter> {
+    repository.fetchSingleCharacterByID(id: id)
+  }
 }

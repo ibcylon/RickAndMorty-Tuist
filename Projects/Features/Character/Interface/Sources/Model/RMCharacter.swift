@@ -8,15 +8,30 @@
 import Foundation
 
 // MARK: - RMCharacter
-public struct RMCharacter: Codable {
-  let id: Int
-  let name, species, type: String
-  let status: RMCharacterStatus
-  let gender: RMGender
-  let origin: RMSingleLocation
-  let location: RMSingleLocation
-  let image: String
-  let episode: [String]
-  let url: String
-  let created: String
+public struct RMCharacter {
+  public let id: Int
+  public let name, species, type: String
+  public let status: RMCharacterStatus
+  public let gender: RMGender
+  public let origin: RMSingleLocation
+  public let location: RMSingleLocation
+  public let image: String
+  public let episode: [String]
+  public let url: String
+  public let created: String
+
+  public init(id: Int, name: String, species: String, type: String, status: RMCharacterStatus, gender: RMGender, origin: RMSingleLocation, location: RMSingleLocation, image: String, episode: [String], url: String, created: String) {
+    self.id = id
+    self.name = name
+    self.species = species
+    self.type = type
+    self.status = status
+    self.gender = gender
+    self.origin = origin
+    self.location = location
+    self.image = image
+    self.episode = episode
+    self.url = url
+    self.created = created
+  }
 }

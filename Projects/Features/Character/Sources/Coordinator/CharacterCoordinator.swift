@@ -18,23 +18,19 @@ public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating 
     characterListFlow()
   }
 
-  public func characterDetailFlow() {
-
-  }
-
   // MARK: Private
   private func characterListFlow() {
     let viewModel = CharacterListViewModel(useCase: characterUseCase)
 
     viewModel.delegate = self
-
     let viewController = CharacterListViewController()
     viewController.viewModel = viewModel
 
-    self.navigationController.pushViewController(viewController, animated: true)
+
+    self.viewControllable.pushViewController(viewController, animated: true)
   }
 
-  public func characterDetailFlow(item: RMCharacter) {
+  public func characterDetailFlow(_ item: RMCharacter) {
 
     let viewModel = CharacterDetailViewModel(useCase: characterUseCase, item: item)
     viewModel.delegate = self
@@ -42,23 +38,23 @@ public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating 
     let viewController = CharacterDetailViewController()
     viewController.viewModel = viewModel
 
-    self.navigationController.pushViewController(viewController, animated: true)
+    self.viewControllable.pushViewController(viewController, animated: true)
   }
 }
 
 extension CharacterCoordinator: CharacterSearchDelegate {
   func presentItem(item: RMCharacter) {
-    self.characterDetailFlow(item: item)
+    self.characterDetailFlow(item)
   }
 
   func logout() {
-    self.navigationController.viewControllers = []
+    self.viewControllable.setViewControllers([])
     self.delegate?.logout()
   }
 }
 
 extension CharacterCoordinator: CharacterDetailDelegate {
   func pop() {
-    self.navigationController.popViewController(animated: true)
+    self.viewControllable.popViewController(animated: true)
   }
 }

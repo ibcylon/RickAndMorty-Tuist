@@ -7,9 +7,9 @@
 
 import Foundation
 
-public struct RMCharacterInfo: Codable {
-  let info: Info
-  let results: [RMCharacter]
+public struct RMCharacterInfo {
+  public let info: Info
+  public let results: [RMCharacter]
 
   public init(info: Info, results: [RMCharacter]) {
     self.info = info
@@ -18,10 +18,10 @@ public struct RMCharacterInfo: Codable {
 }
 
 public struct Info: Codable {
-  let count: Int
-  let pages: Int
-  let next: String?
-  let prev: String?
+  public let count: Int
+  public let pages: Int
+  public let next: String?
+  public let prev: String?
 
   public init(count: Int, pages: Int, next: String?, prev: String?) {
     self.count = count
