@@ -7,11 +7,15 @@
 
 import UIKit
 
+import Core
+import Feature
+
+//  var appCoordinator: LaunchCoordinating?
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
   var window: UIWindow?
 
-  //  var appCoordinator: LaunchCoordinating?
+  var appCoordinator: LaunchCoordinating?
 
   func scene(_ scene: UIScene,
              willConnectTo session: UISceneSession,
@@ -21,12 +25,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     let window = UIWindow(windowScene: scene)
     self.window = window
-    self.window?.rootViewController = UIViewController()
-    self.window?.makeKeyAndVisible()
-
-    self.window?.rootViewController?.view.backgroundColor = .yellow
+    
     print("scenedelegate")
-    //    self.appCoordinator = AppRootBuilder().build()
-    //    self.appCoordinator?.launch(window: window)
+    self.appCoordinator = AppRootBuilder().build()
+    self.appCoordinator?.launch(window: window)
+
+    //    registerDependencies()
   }
 }
