@@ -10,14 +10,14 @@ import ProjectDescriptionHelpers
 import MyPlugin
 
 let project = Project(
-    name: "Feature",
-    targets: [
-      .feature(
-        dependencies: [
-          .feature(implementation: .Character),
-          .feature(implementation: .Location),
-          .module(implementation: .Data, pathName: .Data)
-        ]
-      )
-    ]
+  name: "Features Layer",
+  targets: [
+    .feature(
+      dependencies: [
+        .feature(implementation: .Character),
+        .feature(implementation: .Location),
+        .feature(implementation: .Episode),
+      ]
+    )
+  ]
 )
