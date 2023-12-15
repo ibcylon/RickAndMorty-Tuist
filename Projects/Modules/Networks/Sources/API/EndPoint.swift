@@ -31,8 +31,15 @@ public struct APIComponent {
   public var url: URL {
     URL(string: urlString)!
   }
+  public func url(page: Int) -> URL {
+    URL(string: urlString + "?page=\(page)")!
+  }
 
   public func url(id: Int) -> URL {
     URL(string: urlString + "/\(id)")!
+  }
+
+  public func url(ids: [Int]) -> URL {
+    URL(string: urlString + "/\(ids)")!
   }
 }
