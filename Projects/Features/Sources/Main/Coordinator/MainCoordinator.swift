@@ -7,8 +7,7 @@
 
 import UIKit
 import Core
-import Character
-import CharacterInterface
+import Domain
 
 protocol MainViewControllable: ViewControllable {
   func setViewController(_ viewControllers: [ViewControllable])
@@ -17,20 +16,23 @@ protocol MainViewControllable: ViewControllable {
 final class MainCoordinator: BaseCoordinator, MainCoordinating {
   
   private let characterHome: CharacterBuildable
+  private let locationHome: LocationBuildable
+  private let episodeHome: EpisodeBuildable
 
   var mainViewControllable: MainViewControllable
   var delegate: MainCoordinatingDelegate?
   
   public init(
-    rootViewControllable: ViewControllable,
     mainViewControllable: MainViewControllable,
-    characterHome: CharacterBuildable
+    characterHome: CharacterBuildable,
+    locationHome: LocationBuildable,
+    episodeHome: EpisodeBuildable
   ) {
-
-    rootViewControllable.setViewControllers([mainViewControllable])
-    
     self.mainViewControllable = mainViewControllable
     self.characterHome = characterHome
+    self.locationHome = locationHome
+    self.episodeHome = episodeHome
+
     super.init(rootViewController: mainViewControllable)
   }
 
@@ -42,11 +44,30 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
     let characterCoordinator = self.characterHome.build(rootViewControllable: NavigationControllable())
 
     attachChild(characterCoordinator)
+
     characterCoordinator.viewControllable.uiController.tabBarItem = .makeTabItem(.character)
     characterCoordinator.start()
 
+    let locationCoordinator = self.locationHome.build(rootViewControllable: NavigationControllable())
+
+    attachChild(locationCoordinator)
+
+    locationCoordinator.viewControllable.uiController.tabBarItem = .makeTabItem(.location)
+    locationCoordinator.start()
+
+    let episodeCoordinator = self.episodeHome.build(
+      rootViewControllable: NavigationControllable()
+    )
+
+    attachChild(episodeCoordinator)
+
+    episodeCoordinator.viewControllable.uiController.tabBarItem = .makeTabItem(.episode)
+    episodeCoordinator.start()
+
     let viewControllers = [
-      characterCoordinator.viewControllable
+      characterCoordinator.viewControllable,
+      locationCoordinator.viewControllable,
+      episodeCoordinator.viewControllable
     ]
 
     mainViewControllable.setViewController(viewControllers)
