@@ -6,14 +6,20 @@
 //
 
 import Foundation
-import LocationInterface
+import Domain
 
 import Core
 
 public final class LocationBuilder: LocationBuildable {
+
+  private let detailBuildable: DetailBuildable
+
+  public init(detailBuildable: DetailBuildable) {
+    self.detailBuildable = detailBuildable
+  }
   public func build(rootViewControllable: ViewControllable) -> LocationCoordinating {
 
-    let coordinator = LocationCoordinator()
+    let coordinator = LocationCoordinator(rootViewController: rootViewControllable)
 
     return coordinator
   }

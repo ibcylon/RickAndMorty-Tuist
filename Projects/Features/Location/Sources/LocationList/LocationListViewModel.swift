@@ -14,7 +14,7 @@ import Core
 import LocationInterface
 
 protocol LocationSearchDelegate: AnyObject {
-  func presentItem(item: RMLocation)
+  func presentItem(_ item: RMLocation)
 }
 
 public final class LocationListViewModel: ViewModelType {
@@ -33,33 +33,71 @@ public final class LocationListViewModel: ViewModelType {
   }
 
   public struct Output {
-    let route: Driver<Void>
+    let route: Disposable
     let LocationArray: Driver<[RMLocation]>
+    let hasNextPage: Driver<Bool>
   }
 }
 
 extension LocationListViewModel {
   public func transform(input: Input) -> Output {
-    let onAppear = input.onAppear
+    let store = BehaviorRelay<RMLocationInfo?>(value: nil)
+    let loadedList = BehaviorRelay<[RMLocation]>(value: [])
 
-    let info = onAppear
-      .flatMapLatest { [weak self] in
-        guard let self = self else { fatalError("self is nil") }
-        return self.useCase.fetchSingleLocationByID(id: <#T##Int#>)
-          .asDriver(onErrorDriveWith: .empty())
+    let onAppear = input.onAppear
+      .withLatestFrom(loadedList.asDriver())
+      .filter { $0.isEmpty }
+      .map { _ in }
+
+    let pagingTrigger = input.paging
+      .debounce(.seconds(1))
+
+    let addedList = Driver.merge(pagingTrigger, onAppear)
+      .withLatestFrom(store.asDriver())
+      .asObservable()
+      .flatMapLatest(weak: self) { owner, currentStore -> Observable<RMLocationInfo> in
+        guard let currentStore = currentStore else {
+          return owner.useCase.fetchAllLocations(page: 1)
+        }
+        guard let nextPage = currentStore.info.nextPagenumber else {
+          return .empty()
+        }
+        return owner.useCase.fetchAllLocations(page: nextPage)
+      }
+      .asDriver(onErrorDriveWith: .empty())
+      .map { info -> [RMLocation] in
+        store.accept(info)
+        var mutable = loadedList.value
+        mutable.append(contentsOf: info.results)
+        loadedList.accept(mutable)
+        return info.results
       }
 
-    let list = info.map { $0.results }
-
     let route = input.buttonTap
-      .withLatestFrom(list) { $1[$0.item] }
-      .do(onNext: { [weak self] item in
-        self?.delegate?.presentItem(item: item)
-      }).map { _ in }
+      .withLatestFrom(loadedList.asDriver()) { indexPath, array in
+        RMLogger.dataLogger.debug("\(indexPath)")
+        RMLogger.dataLogger.debug("\(array.count)")
+        return array[indexPath.item]
+      }
+      .drive(with: self, onNext: { owner, item in
+        owner.delegate?.presentItem(item)
+      })
+
+    let hasNextPage = store
+      .map { $0?.info.next == nil ? false : true }
+      .asDriver(onErrorJustReturn: false)
 
     return Output(
       route: route,
-      LocationArray: list
+      LocationArray: addedList,
+      hasNextPage: hasNextPage
     )
+  }
+}
+
+extension ObservableType {
+  func flatMapLatest<A: AnyObject, O: ObservableType>(weak obj: A, selector: @escaping (A, Self.Element) throws -> O) -> Observable<O.Element> {
+    return flatMapLatest { [weak obj] value -> Observable<O.Element> in
+      try obj.map { try selector($0, value).asObservable() } ?? .empty() }
   }
 }

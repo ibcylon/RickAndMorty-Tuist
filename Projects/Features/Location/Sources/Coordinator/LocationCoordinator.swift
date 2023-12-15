@@ -8,23 +8,22 @@
 import Foundation
 
 import LocationInterface
+import CharacterInterface
 import Core
-
-public protocol LocationCoordinatorDelegate: AnyObject {
-
-}
 
 public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
   public weak var delegate: LocationCoordinatorDelegate?
 
   @Injected public var locationUseCase: FetchLocationUseCaseInterface
+  @Injected public var characteruseCase:
+  FetchCharacterUseCaseInterface
 
   public override func start() {
     locationHomeFlow()
   }
 
   public func locationHomeFlow() {
-    let viewModel = LocationListViewModel(useCae: locationUseCase)
+    let viewModel = LocationListViewModel(useCase: locationUseCase)
     viewModel.delegate = self
 
     let viewController = LocationListViewController()
@@ -34,7 +33,11 @@ public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
   }
 
   public func locationDetailFlow(_ item: RMLocation) {
-    let viewModel = LocationDetailViewModel(useCase: locationUseCase, item: item)
+    let viewModel = LocationDetailViewModel(
+      locationUseCase: locationUseCase,
+      characterUseCase: characteruseCase,
+      item: item
+    )
     viewModel.delegate = self
 
     let viewController = LocationDetailViewController()
@@ -45,13 +48,17 @@ public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
 }
 
 extension LocationCoordinator: LocationSearchDelegate {
-  func presentItem(item: RMLocation) {
+  func presentItem(_ item: RMLocation) {
     self.locationDetailFlow(item)
   }
 }
 
 extension LocationCoordinator: LocationDetailDelegate {
-  func pop() {
+  public func locationDetailPop() {
     self.viewControllable.popViewController(animated: true)
+  }
+
+  public func selectCharacter(_ item: RMCharacter) {
+    RMLogger.dataLogger.info("select \(item.name)")
   }
 }

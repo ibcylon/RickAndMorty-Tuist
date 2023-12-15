@@ -15,13 +15,13 @@ let project = Project(
         .feature(
             interface: .Location,
             dependencies: [
-                .feature(interface: .Character),
+              .core
             ]
         ),
         .feature(
             implementation: .Location,
             dependencies: [
-                .feature(interface: .Location),
+              .domain
             ]
         )
     ]
