@@ -6,45 +6,98 @@
 //
 
 import UIKit
-import SnapKit
+
 import RxSwift
 import RxCocoa
+
 import Core
+import Domain
 
-final class CharacterDetailViewController: RMBaseViewController {
+public final class CharacterDetailViewController: RMBaseViewController {
 
-  private let mainView = RMCharacterDetailView()
+  fileprivate let mainView = RMCharacterDetailView()
 
-  var viewModel: CharacterDetailViewModel!
+  public var viewModel: CharacterDetailViewModel!
+  
+  fileprivate var dataSource: DataSource!
 
-  var button = UIButton()
-  override func loadView() {
+  public override func loadView() {
     self.view = mainView
   }
 
-
-  override func makeUI() {
+  public override func makeUI() {
     self.view.backgroundColor = .white
     self.navigationController?.navigationBar.prefersLargeTitles = false
   }
 
-  override func bindViewModel() {
+  public override func navigationSetting() {
+    super.navigationSetting()
+    navigationItem.standardAppearance?.titlePositionAdjustment = .zero
+    navigationItem.leftBarButtonItem = mainView.backButton
+  }
+
+  public override func bindViewModel() {
+    setupDataSource()
+
     let input = CharacterDetailViewModel.Input(
       onAppear: self.rx.viewWillAppear.map { _ in }
         .asDriver(onErrorJustReturn: ()),
-      backButtonTap: self.button.rx.tap.asDriver()
+      selectedLocation: self.mainView.locationButton.rx.tap.asDriver(),
+      selectedEpisode: self.mainView.episodeCollectionView.rx.itemSelected.asDriver(),
+      backButtonTap: self.mainView.backButton.rx.tap.asDriver()
     )
 
     let output = viewModel.transform(input: input)
 
     output.item
-      .drive(onNext: { [weak self] item in
-        self?.mainView.bind(item: item)
-        self?.title = item.name
+      .drive(with: self, onNext: { owner, item in
+        owner.mainView.bind(item: item)
+        owner.navigationItem.title = item.name
       })
       .disposed(by: disposeBag)
-    output.route
-      .drive()
+
+    output.episodes
+      .drive(with: self, onNext: { owner, items in
+        owner.mainView.episodeCollectionView.isHidden = false
+        UIView.animate(withDuration: 0.4) {
+//          owner.mainView.episodeCollectionView.isHidden = false
+//          owner.mainView.episodeCollectionView.alpha = 1
+        }
+        owner.refreshDataSource(items)
+      })
       .disposed(by: disposeBag)
   }
 }
+
+
+extension CharacterDetailViewController {
+  typealias DataSource = UICollectionViewDiffableDataSource<EpisodeSection, RMEpisode>
+  typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeSection, RMEpisode>
+
+  enum EpisodeSection: Hashable {
+    case main
+  }
+  // MARK: - Private
+  private func setupDataSource() {
+    let cellRegistration = UICollectionView.CellRegistration<RMEpisodeCollectionViewCell, RMEpisode> { cell, indexPath, item in
+      cell.configure(with: item)
+    }
+
+    dataSource = UICollectionViewDiffableDataSource(collectionView: mainView.episodeCollectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+      return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
+    })
+
+    var initialSnapshot = Snapshot()
+    initialSnapshot.appendSections([.main])
+    initialSnapshot.appendItems([])
+    dataSource.apply(initialSnapshot)
+  }
+
+  fileprivate func refreshDataSource(_ items: [RMEpisode]) {
+    var snapshot = self.dataSource.snapshot()
+    snapshot.appendItems(items)
+    self.dataSource.apply(snapshot)
+  }
+}
+
+

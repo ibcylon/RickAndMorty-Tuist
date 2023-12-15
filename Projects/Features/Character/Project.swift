@@ -21,7 +21,7 @@ let project = Project(
         .feature(
             implementation: .Character,
             dependencies: [
-              .feature(interface: .Character),
+              .domain
             ]
         )
     ]

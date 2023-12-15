@@ -35,3 +35,14 @@ public struct RMCharacter {
     self.created = created
   }
 }
+
+extension RMCharacter: Hashable {
+  public static func == (lhs: CharacterInterface.RMCharacter, rhs: CharacterInterface.RMCharacter) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+

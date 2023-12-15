@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Core
 import SnapKit
 
 final class CharacterListView: UIView {
@@ -19,13 +20,16 @@ final class CharacterListView: UIView {
 
   let collectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
+    let contentSize = layout.collectionViewContentSize.width
+    let width = (contentSize - 30) / 2
+//    layout.itemSize = CGSize(width: width, height: width * 1.5)
     layout.sectionInset = .init(top: 0, left: 10, bottom: 0, right: 10)
-    layout.footerReferenceSize = .init(width: UIScreen.main.bounds.width, height: 100)
+    layout.footerReferenceSize = .init(width: contentSize, height: 100)
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     collectionView.isHidden = true
     collectionView.alpha = 0
-    collectionView.register(cellType: RMCharacterCollectionViewCell.self)
-    collectionView.register(type: RMFooterLoadingCollectionReusableView.self)
+//    collectionView.register(cellType: RMCharacterCollectionViewCell.self)
+//    collectionView.register(type: RMFooterLoadingCollectionReusableView.self)
     collectionView.backgroundColor = .white
     return collectionView
   }()
@@ -48,7 +52,7 @@ final class CharacterListView: UIView {
     }
 
     collectionView.snp.makeConstraints {
-      $0.edges.equalToSuperview()
+      $0.edges.equalTo(safeAreaLayoutGuide)
     }
 
     setUpCollectionView()
@@ -68,16 +72,6 @@ extension CharacterListView: UICollectionViewDelegate, UICollectionViewDelegateF
       width: width,
       height: height
     )
-  }
-
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    let offset = scrollView.contentOffset.y
-    let totalContentHeight = scrollView.contentSize.height
-    let totalScrollViewFixedHeight = scrollView.frame.size.height
-
-    if offset >= (totalContentHeight - totalScrollViewFixedHeight) {
-      print("need fetching data")
-    }
   }
 }
 

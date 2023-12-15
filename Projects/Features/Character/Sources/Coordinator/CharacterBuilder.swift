@@ -1,11 +1,19 @@
 
 import UIKit
 import Core
-import CharacterInterface
+import Domain
 
 public final class CharacterBuilder: CharacterBuildable {
-  public init() { }
+  private let detailBuildable: DetailBuildable
+
+  public init(detailBuildable: DetailBuildable) {
+    self.detailBuildable = detailBuildable
+  }
   public func build(rootViewControllable: ViewControllable) -> CharacterCoordinating {
-    CharacterCoordinator(rootViewController: rootViewControllable)
+    CharacterCoordinator(
+      rootViewControllable: rootViewControllable,
+      detailBuildable: detailBuildable
+    )
   }
 }
+

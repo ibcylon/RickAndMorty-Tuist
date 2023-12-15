@@ -9,6 +9,6 @@ import Foundation
 
 // MARK: - Location
 public struct RMSingleLocation: Codable {
-  let name: String
-  let url: String
+  public let name: String
+  public let url: String
 }

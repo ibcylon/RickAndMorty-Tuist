@@ -10,7 +10,7 @@ import Core
 
 import SnapKit
 
-final class RMCharacterCollectionViewCell: UICollectionViewCell {
+public final class RMCharacterCollectionViewCell: UICollectionViewCell {
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
@@ -30,21 +30,21 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
     return label
   }()
 
-  override init(frame: CGRect) {
+  public override init(frame: CGRect) {
     super.init(frame: .zero)
     contentView.backgroundColor = .secondarySystemBackground
 
     setUpView()
   }
 
-  override func prepareForReuse() {
+  public override func prepareForReuse() {
     super.prepareForReuse()
     imageView.image = nil
     nameLabel.text = ""
     statusLabel.text = ""
   }
 
-  required init?(coder: NSCoder) {
+  public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -66,7 +66,7 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
       $0.bottom.equalToSuperview().inset(3)
     }
   }
-  override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
     setUpLayers()
   }
@@ -80,9 +80,9 @@ final class RMCharacterCollectionViewCell: UICollectionViewCell {
     contentView.layer.shadowOpacity = 0.3
   }
 
-  func configure(with viewModel: RMCharacterCollectionViewCellViewModel) {
+  public func configure(with viewModel: RMCharacterCollectionViewCellViewModel) {
     self.nameLabel.text = viewModel.name
     self.statusLabel.text = viewModel.statusText
-    self.imageView.setImage(url: viewModel.imageURL)
+    self.imageView.setImage(url: viewModel.image)
   }
 }

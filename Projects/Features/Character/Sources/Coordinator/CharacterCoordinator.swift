@@ -2,24 +2,32 @@
 import UIKit
 import Core
 import RxSwift
-import CharacterInterface
+import Domain
 
-public protocol CharacterCoordinatorDelegate: AnyObject {
-  func logout()
-}
-
-public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating {
+public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating, EpisodeDetailFlow, LocationDetailFlow {
 
   public var delegate: CharacterCoordinatorDelegate?
 
   @Injected public var characterUseCase: FetchCharacterUseCaseInterface
 
+  private let detailBuildable: DetailBuildable
+  private var detailCoordinator: DetailCoordinating?
+
+  public init(
+    rootViewControllable: ViewControllable,
+    detailBuildable: DetailBuildable
+  ) {
+    self.detailBuildable = detailBuildable
+    super.init(rootViewController: rootViewControllable)
+  }
+
   public override func start() {
-    characterListFlow()
+    attachDetailCoordinator()
+    characterHomeFlow()
   }
 
   // MARK: Private
-  private func characterListFlow() {
+  public func characterHomeFlow() {
     let viewModel = CharacterListViewModel(useCase: characterUseCase)
 
     viewModel.delegate = self
@@ -30,15 +38,23 @@ public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating 
     self.viewControllable.pushViewController(viewController, animated: true)
   }
 
+  func attachDetailCoordinator() {
+    let coordinator = detailBuildable.build(rootViewControllable: self.viewControllable)
+    attachChild(coordinator)
+    coordinator.delegate = self
+    self.detailCoordinator = coordinator
+  }
+
   public func characterDetailFlow(_ item: RMCharacter) {
+    self.detailCoordinator?.characterDetailFlow(item)
+  }
 
-    let viewModel = CharacterDetailViewModel(useCase: characterUseCase, item: item)
-    viewModel.delegate = self
+  public func episodeDetailFlow(_ item: RMEpisode) {
+    self.detailCoordinator?.episodeDetailFlow(item)
+  }
 
-    let viewController = CharacterDetailViewController()
-    viewController.viewModel = viewModel
-
-    self.viewControllable.pushViewController(viewController, animated: true)
+  public func locationDetailFlow(_ item: RMLocation) {
+    self.detailCoordinator?.locationDetailFlow(item)
   }
 }
 
@@ -46,15 +62,26 @@ extension CharacterCoordinator: CharacterSearchDelegate {
   func presentItem(item: RMCharacter) {
     self.characterDetailFlow(item)
   }
-
   func logout() {
     self.viewControllable.setViewControllers([])
-    self.delegate?.logout()
+    self.delegate?.detach(self)
   }
 }
 
 extension CharacterCoordinator: CharacterDetailDelegate {
-  func pop() {
+  public func characterDetailPop() {
     self.viewControllable.popViewController(animated: true)
+  }
+  public func characterDetailSelectEpisode(_ item: RMEpisode) {
+    episodeDetailFlow(item)
+  }
+  public func characterDetailSelectLocation(_ item: RMLocation) {
+    locationDetailFlow(item)
+  }
+}
+
+extension CharacterCoordinator: DetailCoordinatorDelegate {
+  public func detach(coordinator: Coordinator) {
+    detachChild(coordinator)
   }
 }
