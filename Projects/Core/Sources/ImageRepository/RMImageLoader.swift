@@ -12,7 +12,10 @@ final class RMImageLoader {
   static let shared = RMImageLoader()
 
   private var imageDataCache = NSCache<NSString, NSData>()
-  private init() {}
+  private init() {
+    self.client = URLSession.shared
+  }
+  private let client: HTTPClient
   private var fileManager: FileManager {
     FileManager.default
   }
@@ -25,7 +28,7 @@ final class RMImageLoader {
 
     // 1. From Memory
     if let memoryData = self.imageDataCache.object(forKey: key) {
-      RMLogger.dataLogger.notice("Read from memory cache")
+//      RMLogger.dataLogger.notice("Read from memory cache")
       completion(.success(memoryData as Data))
       return
     }
@@ -33,17 +36,17 @@ final class RMImageLoader {
     // Then, save to Memory
     if let diskData = fetchFromDisk(url) {
       self.imageDataCache.setObject(diskData as NSData, forKey: key)
-      RMLogger.dataLogger.notice("Read from disk cache")
+//      RMLogger.dataLogger.notice("Read from disk cache")
       completion(.success(diskData))
       return
     }
 
     // 3. From Network
     // Then, save to Memory and Disk
-    let client: HTTPClient = URLSession.shared
     downloadImage(client: client, url: url) { [weak self] result in
       switch result {
       case .success(let data):
+        RMLogger.dataLogger.debug("Read from network")
         let imageData = data as NSData
         self?.imageDataCache.setObject(imageData, forKey: key)
         self?.cacheDisk(key: url, data: data)

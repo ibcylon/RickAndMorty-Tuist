@@ -8,11 +8,11 @@
 import UIKit
 
 public extension UIImageView {
-  public func setImage(url: String) {
+  func setImage(url: String) {
     setImage(url: URL(string: url)!)
   }
 
-  public func setImage(url: URL?) {
+  func setImage(url: URL?) {
     guard let url = url else {
       RMLogger.dataLogger.error("잘못된 URL입니다.")
       self.image = nil

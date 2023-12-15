@@ -21,8 +21,8 @@ open class LaunchCoordinator: BaseCoordinator, LaunchCoordinating {
     window.rootViewController = self.viewControllable.uiController
     window.makeKeyAndVisible()
     
-    RMLogger.ui.debug("런치스크린 3초..")
-    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+    RMLogger.ui.debug("런치스크린 1초..")
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
       self.start()
     }
   }
