@@ -16,10 +16,7 @@ let project = Project(
     .feature(
       implementation: .Data,
       dependencies: [
-        .core,
-        .feature(interface: .Character),
-        
-        .module(implementation: .ThirdPartyLibs, pathName: .Modules(.ThirdPartyLibs)),
+        .domain
       ]
     ),
   ]

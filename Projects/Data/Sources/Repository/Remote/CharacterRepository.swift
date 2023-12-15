@@ -18,11 +18,17 @@ public final class CharacterRepository {
 }
 
 extension CharacterRepository: CharacterRepositoryInterface {
+  
+  public func fetchCharactersByIDs(ids: [Int]) -> Observable<[RMCharacter]> {
+    return characterService.fetchCharactersByIDs(ids: ids)
+  }
+  
   public func fetchAllCharacters(page: Int) -> Observable<RMCharacterInfo> {
-    return characterService.fetchAllCharacter()
+    return characterService.fetchAllCharacter(page: page)
   }
 
   public func fetchSingleCharacterByID(id: Int) -> Observable<RMCharacter> {
     characterService.fetchSingleCharacterByID(id: id)
   }
+
 }

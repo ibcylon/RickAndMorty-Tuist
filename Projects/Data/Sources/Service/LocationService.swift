@@ -13,7 +13,7 @@ import Networks
 import LocationInterface
 
 public protocol LocationService {
-  func fetchAllLocation() -> Observable<RMLocationInfo>
+  func fetchAllLocation(page: Int) -> Observable<RMLocationInfo>
   func fetchSingleLocationByID(id: Int) -> Observable<RMLocation>
 }
 
@@ -26,8 +26,8 @@ public class DefaultLocationService: LocationService {
     self.endPoint = endPoint
   }
 
-  public func fetchAllLocation() -> Observable<RMLocationInfo> {
-    let request = RequestWithURL(url: endPoint.url).request()
+  public func fetchAllLocation(page: Int) -> Observable<RMLocationInfo> {
+    let request = RequestWithURL(url: endPoint.url(page: page)).request()
 
     return perform(request, type: RMLocationInfoDTO.self)
       .map { $0.toDomain() }

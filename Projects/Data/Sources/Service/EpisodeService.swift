@@ -1,8 +1,8 @@
 //
-//  CharacterService.swift
-//  Network
+//  EpisodeService.swift
+//  Data
 //
-//  Created by Kanghos on 2023/11/27.
+//  Created by Kanghos on 2023/12/14.
 //
 
 import Foundation
@@ -10,15 +10,15 @@ import Foundation
 import RxSwift
 
 import Networks
-import CharacterInterface
+import EpisodeInterface
 
-public protocol CharacterService {
-  func fetchAllCharacter(page: Int) -> Observable<RMCharacterInfo>
-  func fetchSingleCharacterByID(id: Int) -> Observable<RMCharacter>
-  func fetchCharactersByIDs(ids: [Int]) -> Observable<[RMCharacter]>
+public protocol EpisodeService {
+  func fetchAllEpisode(page: Int) -> Observable<RMEpisodeInfo>
+  func fetchSingleEpisodeByID(id: Int) -> Observable<RMEpisode>
+  func fetchEpisodesByIDs(ids: [Int]) -> Observable<[RMEpisode]>
 }
 
-public class DefaultCharacterService: CharacterService {
+public class DefaultEpisodeService: EpisodeService {
   private let client: HTTPClient
   private let endPoint: APIComponent
 
@@ -27,25 +27,25 @@ public class DefaultCharacterService: CharacterService {
     self.endPoint = endPoint
   }
 
-  public func fetchAllCharacter(page: Int) -> Observable<RMCharacterInfo> {
+  public func fetchAllEpisode(page: Int) -> Observable<RMEpisodeInfo> {
     let request = RequestWithURL(url: endPoint.url(page: page)).request()
 
-    return perform(request, type: RMCharacterInfoDTO.self)
+    return perform(request, type: RMEpisodeInfoDTO.self)
       .map { $0.toDomain() }
   }
 
-  public func fetchSingleCharacterByID(id: Int) -> Observable<RMCharacter> {
+  public func fetchSingleEpisodeByID(id: Int) -> Observable<RMEpisode> {
     let request = RequestWithURL(url: endPoint.url(id: id)).request()
 
-    return perform(request, type: RMCharacterDTO.self)
+    return perform(request, type: RMEpisodeDTO.self)
       .map { $0.toDomain() }
   }
 
-  public func fetchCharactersByIDs(ids: [Int]) -> Observable<[RMCharacter]> {
+  public func fetchEpisodesByIDs(ids: [Int]) -> Observable<[RMEpisode]> {
     let request = RequestWithURL(url: endPoint.url(ids: ids))
       .request()
 
-    return perform(request, type: [RMCharacterDTO].self)
+    return perform(request, type: [RMEpisodeDTO].self)
       .map { $0.map { $0.toDomain() } }
   }
 

@@ -7,7 +7,6 @@
 
 import Foundation
 
-import CharacterInterface
 import LocationInterface
 
 public struct RMLocationInfoDTO: Codable {
