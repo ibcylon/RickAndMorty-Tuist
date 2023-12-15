@@ -15,6 +15,7 @@ public enum Feature: String {
   case Episode = "Episode"
   case App = "App"
   case Data = "Data"
+  case Domain = "Domain"
 
   case Networks
   case ThirdPartyLibs
@@ -25,6 +26,7 @@ public enum ModulePath {
   case App
   case Core
   case Data
+  case Domain
   case Features
   case Modules(ModuleName)
 
@@ -40,6 +42,8 @@ public enum ModulePath {
       return "App"
     case .Core:
       return "Core"
+    case .Domain:
+      return "Domain"
     case .Data:
       return "Data"
     case .Features:
@@ -98,5 +102,8 @@ public extension TargetDependency {
 
   static var core: ProjectDescription.TargetDependency {
     .module(implementation: .Core, pathName: .Core)
+  }
+  static var domain: TargetDependency {
+    .module(implementation: .Domain, pathName: .Domain)
   }
 }

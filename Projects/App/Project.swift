@@ -17,6 +17,7 @@ let project = Project(
       sources: "Sources/**",
       dependencies: [
         .feature,
+        .module(implementation: .Data, pathName: .Data),
       ]
     )
   ]
