@@ -15,7 +15,7 @@ import Domain
 
 public final class CharacterDetailViewController: RMBaseViewController {
 
-  fileprivate let mainView = RMCharacterDetailView()
+  fileprivate let mainView = CharacterDetailView()
 
   public var viewModel: CharacterDetailViewModel!
   

@@ -22,10 +22,14 @@ public final class LocationDetailViewController: RMBaseViewController {
 
   public var viewModel: LocationDetailViewModel!
 
-  var button = UIButton()
-
   public override func loadView() {
     self.view = mainView
+  }
+
+  public override func navigationSetting() {
+    super.navigationSetting()
+    navigationItem.standardAppearance?.titlePositionAdjustment = .zero
+    navigationItem.leftBarButtonItem = mainView.backButton
   }
 
   public override func bindViewModel() {
@@ -34,7 +38,7 @@ public final class LocationDetailViewController: RMBaseViewController {
     let input = LocationDetailViewModel.Input(
       onAppear: self.rx.viewWillAppear.map { _ in }
         .asDriver(onErrorJustReturn: ()),
-      backButtonTap: self.button.rx.tap.asDriver(),
+      backButtonTap: self.mainView.backButton.rx.tap.asDriver(),
       selectedCharacter: self.mainView.collectionView.rx.itemSelected
         .asDriver()
     )

@@ -11,7 +11,7 @@ import CharacterInterface
 import Core
 import SnapKit
 
-final class RMCharacterDetailView: RMBaseView {
+final class CharacterDetailView: RMBaseView {
   private(set) lazy var backButton = UIBarButtonItem(
     image: UIImage(systemName: "chevron.backward"),
     style: .plain,
@@ -26,8 +26,13 @@ final class RMCharacterDetailView: RMBaseView {
 
   private(set) lazy var locationButton: UIButton = {
     let button = UIButton()
-    button.titleLabel?.textColor = .darkGray
-    button.titleLabel?.font = .systemFont(ofSize: 30, weight: .semibold)
+    button.backgroundColor = .darkGray
+    button.setTitleColor(.white, for: .normal)
+    button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+    button.layer.borderWidth = 3
+    button.layer.borderColor = UIColor.lightGray.cgColor
+    button.layer.cornerRadius = 8
+
     return button
   }()
 
@@ -54,7 +59,7 @@ final class RMCharacterDetailView: RMBaseView {
 
     episodeCollectionView.setContentHuggingPriority(.defaultLow, for: .vertical)
     episodeCollectionView.snp.makeConstraints {
-      $0.top.equalTo(locationButton.snp.bottom)
+      $0.top.equalTo(locationButton.snp.bottom).offset(10)
       $0.leading.trailing.equalToSuperview()
       $0.bottom.equalTo(safeAreaLayoutGuide)
     }

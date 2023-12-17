@@ -19,7 +19,10 @@ public final class LocationBuilder: LocationBuildable {
   }
   public func build(rootViewControllable: ViewControllable) -> LocationCoordinating {
 
-    let coordinator = LocationCoordinator(rootViewController: rootViewControllable)
+    let coordinator = LocationCoordinator(
+      rootViewController: rootViewControllable,
+      detailBuildable: detailBuildable
+    )
 
     return coordinator
   }

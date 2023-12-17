@@ -47,6 +47,10 @@ public final class LocationDetailViewModel: ViewModelType {
     self.locationUseCase = locationUseCase
   }
 
+  deinit {
+    RMLogger.cycle(name: self)
+  }
+
   public func transform(input: Input) -> Output {
     let locationItem = Driver.just(self.item)
     

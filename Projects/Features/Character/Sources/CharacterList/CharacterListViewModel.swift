@@ -54,17 +54,13 @@ extension CharacterListViewModel {
 
     let addedList = Driver.merge(pagingTrigger, onAppear)
       .withLatestFrom(store.asDriver())
-      .flatMapLatest { [weak self] currentStore in
-        guard let self = self else { return Driver<RMCharacterInfo>.empty() }
-        guard
-          let nextPage = currentStore?.info.nextPagenumber
-        else {
-          return self.useCase.fetchAllCharacters(page: 1)
-            .asDriver(onErrorDriveWith: .empty())
+      .asObservable()
+      .flatMapLatest(weak: self) { owner, currentStore -> Observable<RMCharacterInfo> in
+        guard let nextPage = currentStore?.info.nextPagenumber else {
+          return owner.useCase.fetchAllCharacters(page: 1)
         }
-        return self.useCase.fetchAllCharacters(page: nextPage)
-          .asDriver(onErrorDriveWith: .empty())
-      }
+        return owner.useCase.fetchAllCharacters(page: nextPage)
+      }.asDriver(onErrorDriveWith: .empty())
       .map {
         store.accept($0)
         var mutable = loadedList.value

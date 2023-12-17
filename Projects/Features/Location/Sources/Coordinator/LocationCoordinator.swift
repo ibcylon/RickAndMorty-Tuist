@@ -7,19 +7,35 @@
 
 import Foundation
 
-import LocationInterface
-import CharacterInterface
+import Domain
 import Core
 
-public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
+public final class LocationCoordinator: BaseCoordinator, LocationCoordinating, CharacterDetailFlow, EpisodeDetailFlow {
   public weak var delegate: LocationCoordinatorDelegate?
 
   @Injected public var locationUseCase: FetchLocationUseCaseInterface
-  @Injected public var characteruseCase:
-  FetchCharacterUseCaseInterface
+
+  private let detailBuildable: DetailBuildable
+  private var detailCoordinator: DetailCoordinating?
+
+  public init(
+    rootViewController: ViewControllable,
+    detailBuildable: DetailBuildable
+  ) {
+    self.detailBuildable = detailBuildable
+    super.init(rootViewController: rootViewController)
+  }
 
   public override func start() {
+    attachDetailCoordinator()
     locationHomeFlow()
+  }
+
+  func attachDetailCoordinator() {
+    let coordinator = detailBuildable.build(rootViewControllable: self.viewControllable)
+    attachChild(coordinator)
+    coordinator.delegate = self
+    self.detailCoordinator = coordinator
   }
 
   public func locationHomeFlow() {
@@ -33,17 +49,20 @@ public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
   }
 
   public func locationDetailFlow(_ item: RMLocation) {
-    let viewModel = LocationDetailViewModel(
-      locationUseCase: locationUseCase,
-      characterUseCase: characteruseCase,
-      item: item
-    )
-    viewModel.delegate = self
+    self.detailCoordinator?.locationDetailFlow(item)
+  }
 
-    let viewController = LocationDetailViewController()
-    viewController.viewModel = viewModel
+  public func characterDetailFlow(_ item: RMCharacter) {
+    self.detailCoordinator?.characterDetailFlow(item)
+  }
 
-    self.viewControllable.pushViewController(viewController, animated: true)
+  public func episodeDetailFlow(_ item: RMEpisode) {
+    self.detailCoordinator?.episodeDetailFlow(item)
+  }
+}
+extension LocationCoordinator: DetailCoordinatorDelegate {
+  public func detach(coordinator: Coordinator) {
+    detachChild(coordinator)
   }
 }
 
@@ -52,13 +71,13 @@ extension LocationCoordinator: LocationSearchDelegate {
     self.locationDetailFlow(item)
   }
 }
-
-extension LocationCoordinator: LocationDetailDelegate {
-  public func locationDetailPop() {
-    self.viewControllable.popViewController(animated: true)
-  }
-
-  public func selectCharacter(_ item: RMCharacter) {
-    RMLogger.dataLogger.info("select \(item.name)")
-  }
-}
+//
+//extension LocationCoordinator: LocationDetailDelegate {
+//  public func locationDetailPop() {
+//    self.viewControllable.popViewController(animated: true)
+//  }
+//
+//  public func selectCharacter(_ item: RMCharacter) {
+//    RMLogger.dataLogger.info("select \(item.name)")
+//  }
+//}

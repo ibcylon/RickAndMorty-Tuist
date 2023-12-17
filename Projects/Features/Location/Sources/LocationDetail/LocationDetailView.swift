@@ -11,12 +11,12 @@ import LocationInterface
 import Core
 
 final class LocationDetailView: UIView {
-  
-  private lazy var nameLabel: UILabel = {
-    let label = UILabel()
-    label.textAlignment = .center
-    return label
-  }()
+  private(set) lazy var backButton = UIBarButtonItem(
+    image: UIImage(systemName: "chevron.backward"),
+    style: .plain,
+    target: nil,
+    action: nil
+  )
 
   private lazy var typeLabel: UILabel = {
     let label = UILabel()
@@ -54,35 +54,30 @@ final class LocationDetailView: UIView {
   }
 
   private func makeUI() {
+    backgroundColor = .black
     [
-      nameLabel, typeLabel, dimensionLabel,
+      typeLabel, dimensionLabel,
       collectionView
     ].forEach { addSubview($0) }
 
-    nameLabel.snp.makeConstraints {
+    typeLabel.snp.makeConstraints {
       $0.top.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(15)
       $0.height.equalTo(50)
     }
 
-    typeLabel.snp.makeConstraints {
-      $0.top.equalTo(nameLabel.snp.bottom)
-      $0.height.leading.trailing.equalTo(nameLabel)
-    }
-
     dimensionLabel.snp.makeConstraints {
       $0.top.equalTo(typeLabel.snp.bottom)
-      $0.height.leading.trailing.equalTo(nameLabel)
+      $0.height.leading.trailing.equalTo(typeLabel)
     }
     
     collectionView.snp.makeConstraints {
-      $0.leading.trailing.equalTo(nameLabel)
+      $0.leading.trailing.equalTo(typeLabel)
       $0.top.equalTo(dimensionLabel.snp.bottom)
       $0.bottom.equalTo(safeAreaLayoutGuide)
     }
   }
 
   func bind(_ item: RMLocation) {
-    nameLabel.text = item.name
     typeLabel.text = item.type
     dimensionLabel.text = item.dimension
   }

@@ -24,8 +24,6 @@ public final class EpisodeDetailViewController: RMBaseViewController {
 
   public var viewModel: EpisodeDetailViewModel!
 
-  var button = UIButton()
-
   public override func loadView() {
     self.view = mainView
   }
@@ -41,11 +39,6 @@ public final class EpisodeDetailViewController: RMBaseViewController {
     )
     navigationItem.leftBarButtonItem = backButton
  
-    backButton.rx.tap
-      .asDriver()
-      .debug("backbutton tap")
-      .drive()
-      .disposed(by: disposeBag)
     let input = EpisodeDetailViewModel.Input(
       onAppear: self.rx.viewWillAppear.map { _ in }
         .asDriver(onErrorJustReturn: ()),

@@ -1,7 +1,6 @@
 
 import UIKit
 import Core
-import RxSwift
 import Domain
 
 public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating, EpisodeDetailFlow, LocationDetailFlow {
@@ -65,18 +64,6 @@ extension CharacterCoordinator: CharacterSearchDelegate {
   func logout() {
     self.viewControllable.setViewControllers([])
     self.delegate?.detach(self)
-  }
-}
-
-extension CharacterCoordinator: CharacterDetailDelegate {
-  public func characterDetailPop() {
-    self.viewControllable.popViewController(animated: true)
-  }
-  public func characterDetailSelectEpisode(_ item: RMEpisode) {
-    episodeDetailFlow(item)
-  }
-  public func characterDetailSelectLocation(_ item: RMLocation) {
-    locationDetailFlow(item)
   }
 }
 

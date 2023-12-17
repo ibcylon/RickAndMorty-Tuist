@@ -47,6 +47,10 @@ public final class EpisodeDetailViewModel: ViewModelType {
     self.episodeUseCase = episodeUseCase
   }
 
+  deinit {
+    RMLogger.cycle(name: self)
+  }
+
   public func transform(input: Input) -> Output {
     let episodeItem = Driver.just(self.item)
 
