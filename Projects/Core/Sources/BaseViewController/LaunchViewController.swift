@@ -13,10 +13,10 @@ public final class RMLaunchViewController: RMBaseViewController {
     super.viewDidLoad()
 
     self.view.backgroundColor = .orange
+    
 
-    let view = UIView()
-    view.backgroundColor = .green
-    view.bounds = CGRect(origin: .zero, size: CGSize(width: 100, height: 100))
+    let view = UIImageView(image: CoreAsset.ImageAsset.launchScreen.image)
+    view.bounds = self.view.bounds
 
     view.center = self.view.center
     self.view.addSubview(view)
