@@ -14,6 +14,7 @@ let project = Project.library(
   dependencies: [
     .external(.RxSwift),
     .external(.SnapKit),
-    .external(.RxCocoa)
+    .external(.RxCocoa),
+    .external(.CachedAsyncImage)
   ]
 )

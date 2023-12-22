@@ -58,6 +58,7 @@ public enum External: String {
   case RxSwift
   case RxCocoa
   case SnapKit
+  case CachedAsyncImage
 }
 
 public extension TargetDependency {
