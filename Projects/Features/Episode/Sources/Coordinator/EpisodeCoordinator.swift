@@ -10,7 +10,7 @@ import Core
 
 import Domain
 
-public final class EpisodeCoordinator: BaseCoordinator, EpisodeCoordinating, CharacterDetailFlow, LocationDetailFlow {
+public final class EpisodeCoordinator: BaseCoordinator, EpisodeCoordinating {
 
   public var delegate: EpisodeCoordinatorDelegate?
 
@@ -28,14 +28,27 @@ public final class EpisodeCoordinator: BaseCoordinator, EpisodeCoordinating, Cha
   }
 
   public override func start() {
-    attachDetailCoordinator()
     episodeHomeFlow()
   }
+
   func attachDetailCoordinator() {
+    if self.detailCoordinator != nil {
+      return
+    }
+
     let coordinator = detailBuildable.build(rootViewControllable: self.viewControllable)
     attachChild(coordinator)
     coordinator.delegate = self
     self.detailCoordinator = coordinator
+  }
+
+  func detachDetailCoordinator() {
+    guard let coordinator = self.detailCoordinator else {
+      return
+    }
+    coordinator.delegate = nil
+    detachChild(coordinator)
+    self.detailCoordinator = nil
   }
 
   public func episodeHomeFlow() {
@@ -49,14 +62,8 @@ public final class EpisodeCoordinator: BaseCoordinator, EpisodeCoordinating, Cha
   }
 
   public func episodeDetailFlow(_ item: RMEpisode) {
+    attachDetailCoordinator()
     self.detailCoordinator?.episodeDetailFlow(item)
-  }
-
-  public func characterDetailFlow(_ item: RMCharacter) {
-    self.detailCoordinator?.characterDetailFlow(item)
-  }
-  public func locationDetailFlow(_ item: RMLocation) {
-    self.detailCoordinator?.locationDetailFlow(item)
   }
 }
 

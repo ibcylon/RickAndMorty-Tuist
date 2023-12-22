@@ -18,7 +18,7 @@ public final class DetailCoordinator: BaseCoordinator, DetailCoordinating {
   @Injected var episodeUseCase: FetchEpisodeUseCaseInterface
   @Injected var locationUseCase: FetchLocationUseCaseInterface
 
-  public var delegate: DetailCoordinatorDelegate?
+  public weak var delegate: DetailCoordinatorDelegate?
 
   public override func start() {
     

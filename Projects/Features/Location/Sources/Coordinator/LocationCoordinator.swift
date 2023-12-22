@@ -10,7 +10,7 @@ import Foundation
 import Domain
 import Core
 
-public final class LocationCoordinator: BaseCoordinator, LocationCoordinating, CharacterDetailFlow, EpisodeDetailFlow {
+public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
   public weak var delegate: LocationCoordinatorDelegate?
 
   @Injected public var locationUseCase: FetchLocationUseCaseInterface
@@ -32,10 +32,23 @@ public final class LocationCoordinator: BaseCoordinator, LocationCoordinating, C
   }
 
   func attachDetailCoordinator() {
+    if self.detailCoordinator != nil {
+      return
+    }
+
     let coordinator = detailBuildable.build(rootViewControllable: self.viewControllable)
     attachChild(coordinator)
     coordinator.delegate = self
     self.detailCoordinator = coordinator
+  }
+
+  func detachDetailCoordinator() {
+    guard let coordinator = self.detailCoordinator else {
+      return
+    }
+    coordinator.delegate = nil
+    detachChild(coordinator)
+    self.detailCoordinator = nil
   }
 
   public func locationHomeFlow() {
@@ -49,20 +62,13 @@ public final class LocationCoordinator: BaseCoordinator, LocationCoordinating, C
   }
 
   public func locationDetailFlow(_ item: RMLocation) {
+    attachDetailCoordinator()
     self.detailCoordinator?.locationDetailFlow(item)
-  }
-
-  public func characterDetailFlow(_ item: RMCharacter) {
-    self.detailCoordinator?.characterDetailFlow(item)
-  }
-
-  public func episodeDetailFlow(_ item: RMEpisode) {
-    self.detailCoordinator?.episodeDetailFlow(item)
   }
 }
 extension LocationCoordinator: DetailCoordinatorDelegate {
   public func detach(coordinator: Coordinator) {
-    detachChild(coordinator)
+    detachDetailCoordinator()
   }
 }
 
@@ -71,13 +77,3 @@ extension LocationCoordinator: LocationSearchDelegate {
     self.locationDetailFlow(item)
   }
 }
-//
-//extension LocationCoordinator: LocationDetailDelegate {
-//  public func locationDetailPop() {
-//    self.viewControllable.popViewController(animated: true)
-//  }
-//
-//  public func selectCharacter(_ item: RMCharacter) {
-//    RMLogger.dataLogger.info("select \(item.name)")
-//  }
-//}

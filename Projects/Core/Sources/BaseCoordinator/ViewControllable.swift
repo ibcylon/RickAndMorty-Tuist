@@ -39,4 +39,35 @@ public extension ViewControllable {
       self.uiController.navigationController?.popViewController(animated: animated)
     }
   }
+
+  func presentBottomSheet(_ viewControllable: ViewControllable, animated: Bool) {
+
+    let navigation = NavigationControllable(rootViewControllable: viewControllable)
+    if let sheet = navigation.uiController.sheetPresentationController {
+      sheet.prefersGrabberVisible = true
+      sheet.preferredCornerRadius = 12
+      sheet.detents = [
+        .medium(),
+      ]
+    }
+
+    if let nav = self.uiController as? UINavigationController {
+      nav.present(navigation.uiController, animated: animated)
+    } else {
+      self.uiController.navigationController?.present(navigation.uiController, animated: animated)
+    }
+  }
+}
+
+public extension UISheetPresentationController.Detent {
+  static func small(
+      identifier: UISheetPresentationController.Detent.Identifier? = nil,
+      resolvedValue:  CGFloat = 300
+  ) -> UISheetPresentationController.Detent {
+    return .custom { context in
+      resolvedValue
+    }
+  }
+
+//  static let small = UISheetPresentationController.Detent.Identifier("small")
 }

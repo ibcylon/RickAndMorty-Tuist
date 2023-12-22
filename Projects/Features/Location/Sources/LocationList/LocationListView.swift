@@ -26,7 +26,7 @@ final class LocationListView: UIView {
     let layout = createLayout()
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
     collectionView.backgroundColor = .white
-    collectionView.backgroundView = RMEmptyView(title: "에러")
+    collectionView.backgroundView = RMEmptyView(title: "Location")
     collectionView.refreshControl = self.refreshControl
     return collectionView
   }()
