@@ -11,7 +11,7 @@ enum Constant {
   static let baseURLString: String = "https://rickandmortyapi.com/api"
 
 }
-public enum EndPoint: String {
+public enum EndPoint: String, CaseIterable, Hashable {
   case character
   case location
   case episode
@@ -41,5 +41,18 @@ public struct APIComponent {
 
   public func url(ids: [Int]) -> URL {
     URL(string: urlString + "/\(ids)")!
+  }
+
+  public func url(page: Int, filter: [String: Any]) -> URL {
+    var components = URLComponents(string: urlString)!
+    components.queryItems = []
+    var filter = filter
+    filter["page"] = page
+
+    for (key, value) in filter {
+        let item = URLQueryItem(name: key, value: "\(value)")
+        components.queryItems?.append(item)
+    }
+    return components.url!
   }
 }

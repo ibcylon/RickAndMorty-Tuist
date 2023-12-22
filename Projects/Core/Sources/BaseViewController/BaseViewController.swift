@@ -17,6 +17,11 @@ open class RMBaseViewController: UIViewController, ViewControllable {
     RMLogger.cycle(name: self)
   }
 
+  public init() {
+    super.init(nibName: nil, bundle: nil)
+    RMLogger.cycle(name: self)
+  }
+
   open override func viewDidLoad() {
     super.viewDidLoad()
 

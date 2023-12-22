@@ -6,16 +6,18 @@
 //
 
 import UIKit
+import SwiftUI
 
 import SnapKit
 import RxSwift
 import RxCocoa
+import CachedAsyncImage
 
 import CharacterInterface
 import Core
 
 final class CharacterListViewController: RMBaseViewController {
-  
+
   private let mainView = CharacterListView()
   var viewModel: CharacterListViewModel!
 
@@ -30,6 +32,11 @@ final class CharacterListViewController: RMBaseViewController {
     self.title = "Characters"
   }
 
+  override func navigationSetting() {
+    super.navigationSetting()
+    navigationItem.rightBarButtonItem = mainView.searchButton
+  }
+
   override func bindViewModel() {
     setupDataSource()
 
@@ -39,7 +46,9 @@ final class CharacterListViewController: RMBaseViewController {
 
     let input = CharacterListViewModel.Input(
       onAppear: self.rx.viewWillAppear.map { _ in }.asDriver(onErrorJustReturn: ()),
-      buttonTap: self.mainView.collectionView.rx.itemSelected.asDriver(),
+      itemSelected: self.mainView.collectionView.rx.itemSelected.asDriver(),
+      search:
+        self.mainView.searchButton.rx.tap.asDriver(),
       paging: pagingTrigger
     )
 
@@ -55,10 +64,6 @@ final class CharacterListViewController: RMBaseViewController {
         owner.refreshDataSource(items)
       })
       .disposed(by: disposeBag)
-
-    output.route
-    .drive()
-    .disposed(by: disposeBag)
 
     output.hasNextPage
       .drive(hasNextPageRelay)
@@ -76,7 +81,34 @@ extension CharacterListViewController {
   // MARK: - Private
   private func setupDataSource() {
     let cellRegistration = UICollectionView.CellRegistration<RMCharacterCollectionViewCell, RMCharacter> { cell, indexPath, item in
-      cell.configure(with: .init(item))
+      //      cell.configure(with: .init(item))
+      cell.contentConfiguration = UIHostingConfiguration {
+        ZStack {
+          Color(.black)
+            .overlay(
+              VStack {
+                CachedAsyncImage(
+                  url: URL(string: item.image),
+                  urlCache: .imageCache
+                ) { image in
+                  image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerSize: CGSize.init(width: 10, height: 10)))
+                } placeholder: {
+                  ProgressView()
+                }
+
+                Text(item.status.rawValue)
+                  .fontWeight(.semibold)
+                  .foregroundStyle(.white)
+                Text(item.name)
+                  .foregroundStyle(.white)
+                Spacer()
+              }
+            )
+        }
+      }
     }
 
     let footerRegistration = UICollectionView.SupplementaryRegistration<RMFooterLoadingCollectionReusableView>(elementKind: UICollectionView.elementKindSectionFooter) { [weak self] supplementaryView, elementKind, indexPath in

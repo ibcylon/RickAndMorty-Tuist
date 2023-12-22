@@ -16,6 +16,8 @@ public final class RMLaunchViewController: RMBaseViewController {
     
 
     let view = UIImageView(image: CoreAsset.ImageAsset.launchScreen.image)
+    view.contentMode = .scaleAspectFit
+    view.backgroundColor = .black
     view.bounds = self.view.bounds
 
     view.center = self.view.center

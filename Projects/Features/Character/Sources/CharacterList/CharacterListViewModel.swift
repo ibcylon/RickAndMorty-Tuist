@@ -16,12 +16,14 @@ import CharacterInterface
 protocol CharacterSearchDelegate: AnyObject {
   func logout()
   func presentItem(item: RMCharacter)
+  func searchButtonTap()
 }
 
 public final class CharacterListViewModel: ViewModelType {
   private let useCase: FetchCharacterUseCaseInterface
 
   var delegate: CharacterSearchDelegate?
+  private var disposeBag = DisposeBag()
 
   init(useCase: FetchCharacterUseCaseInterface) {
     self.useCase = useCase
@@ -29,12 +31,12 @@ public final class CharacterListViewModel: ViewModelType {
   
   public struct Input {
     let onAppear: Driver<Void>
-    let buttonTap: Driver<IndexPath>
+    let itemSelected: Driver<IndexPath>
+    let search: Driver<Void>
     let paging: Driver<Void>
   }
 
   public struct Output {
-    let route: Driver<Void>
     let characterArray: Driver<[RMCharacter]>
     let hasNextPage: Driver<Bool>
   }
@@ -69,22 +71,27 @@ extension CharacterListViewModel {
         return $0.results
       }
 
-    let route = input.buttonTap
+    input.itemSelected
       .withLatestFrom(loadedList.asDriver()) { indexPath, array in
         RMLogger.dataLogger.debug("\(indexPath)")
         RMLogger.dataLogger.debug("\(array.count)")
         return array[indexPath.item]
       }
-      .do(onNext: { [weak self] item in
-        self?.delegate?.presentItem(item: item)
-      }).map { _ in }
+      .drive(with: self, onNext: { owner, item in
+        owner.delegate?.presentItem(item: item)
+      })
+      .disposed(by: disposeBag)
+    input.search
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.searchButtonTap()
+      })
+      .disposed(by: disposeBag)
 
     let hasNextPage = store
       .map { $0?.info.next == nil ? false : true }
       .asDriver(onErrorJustReturn: false)
 
     return Output(
-      route: route,
       characterArray: addedList,
       hasNextPage: hasNextPage
     )
