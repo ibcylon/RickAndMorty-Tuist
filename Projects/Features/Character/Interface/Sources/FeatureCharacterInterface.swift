@@ -13,5 +13,5 @@ public protocol FetchCharacterUseCaseInterface {
   func fetchAllCharacters(page: Int) -> Observable<RMCharacterInfo>
   func fetchSingleCharacterByID(id: Int) -> Observable<RMCharacter>
   func fetchCharactersByIDs(ids: [Int]) -> Observable<[RMCharacter]>
-//  func fetchCharactersByFilter(filter: RMCharacterFilter, page: Int) -> Observable<RMCharacterInfo>
+  func fetchCharactersByFilter(filter: RMCharacterFilter, page: Int) -> Observable<RMCharacterInfo>
 }

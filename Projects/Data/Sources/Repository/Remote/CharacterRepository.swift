@@ -31,4 +31,7 @@ extension CharacterRepository: CharacterRepositoryInterface {
     characterService.fetchSingleCharacterByID(id: id)
   }
 
+  public func fetchCharactersByFilter(filter: RMCharacterFilter, page: Int) -> Observable<RMCharacterInfo> {
+    characterService.fetchCharactersByFilter(filter: filter, page: page)
+  }
 }

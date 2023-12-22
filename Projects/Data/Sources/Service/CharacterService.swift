@@ -9,6 +9,7 @@ import Foundation
 
 import RxSwift
 
+import Core
 import Networks
 import CharacterInterface
 
@@ -16,6 +17,7 @@ public protocol CharacterService {
   func fetchAllCharacter(page: Int) -> Observable<RMCharacterInfo>
   func fetchSingleCharacterByID(id: Int) -> Observable<RMCharacter>
   func fetchCharactersByIDs(ids: [Int]) -> Observable<[RMCharacter]>
+  func fetchCharactersByFilter(filter: RMCharacterFilter, page: Int) -> Observable<RMCharacterInfo>
 }
 
 public class DefaultCharacterService: CharacterService {
@@ -48,10 +50,19 @@ public class DefaultCharacterService: CharacterService {
     return perform(request, type: [RMCharacterDTO].self)
       .map { $0.map { $0.toDomain() } }
   }
-
+  public func fetchCharactersByFilter(filter: RMCharacterFilter, page: Int) -> Observable<RMCharacterInfo> {
+    let request = RequestWithURL(
+      url: endPoint.url(
+        page: page,
+        filter: filter.toDictionary()))
+      .request()
+    return perform(request, type: RMCharacterInfoDTO.self)
+      .map { $0.toDomain() }
+  }
   // MARK: - private
 
   private func perform<T: Decodable>(_ request: URLRequest, type: T.Type) -> Observable<T> {
+    RMLogger.dataLogger.debug("\(request)")
     return .create { [weak self] observer in
 
       self?.client.perform(request) { result in
