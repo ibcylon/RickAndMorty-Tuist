@@ -15,11 +15,11 @@ public extension UICollectionViewLayout {
     return layout
   }
 
-  static func createListLayout() -> UICollectionViewFlowLayout {
+  static func createListLayout(ratio: CGFloat = 100 / 358) -> UICollectionViewFlowLayout {
     let layout = UICollectionViewFlowLayout()
     let bound = UIScreen.main.bounds
     let width = bound.width - 14 * 2
-    let height = width * (108 / 358)
+    let height = width * ratio
 
     layout.itemSize = CGSize(width: width, height: height)
     layout.minimumLineSpacing = 8
@@ -43,6 +43,18 @@ public extension UICollectionViewLayout {
     layout.itemSize = CGSize(width: width, height: height)
     layout.sectionInset = .init(top: 0, left: 10, bottom: 0, right: 10)
 
+    return layout
+  }
+
+  static func tagLayout(padding: CGFloat = 15.0) -> UICollectionViewFlowLayout {
+    let layout = UICollectionViewFlowLayout()
+    let bound = UIScreen.main.bounds
+    let width = (bound.width - padding * 2) / 5
+    let height = 50.0
+
+    layout.estimatedItemSize = CGSize(width: width, height: height)
+    layout.sectionInset = .init(top: 0, left: 10, bottom: 0, right: 10)
+    layout.scrollDirection = .horizontal
     return layout
   }
 }

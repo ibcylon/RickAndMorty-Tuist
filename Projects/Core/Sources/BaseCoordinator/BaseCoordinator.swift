@@ -27,7 +27,7 @@ open class BaseCoordinator: Coordinator {
   }
 
   deinit {
-    RMLogger.ui.debug("\(#function) \(type(of: self))")
+    RMLogger.ui.info("\(#function) \(type(of: self))")
   }
 
   open func start() {
