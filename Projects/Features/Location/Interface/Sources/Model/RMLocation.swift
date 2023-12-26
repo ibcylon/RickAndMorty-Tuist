@@ -25,3 +25,14 @@ public struct RMLocation: Codable {
     self.created = created
   }
 }
+
+extension RMLocation: Hashable {
+  public static func == (lhs: RMLocation, rhs: RMLocation) -> Bool {
+    lhs.id == rhs.id
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(id)
+  }
+}
+
