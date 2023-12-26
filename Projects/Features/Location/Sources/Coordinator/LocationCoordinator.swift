@@ -55,8 +55,7 @@ public final class LocationCoordinator: BaseCoordinator, LocationCoordinating {
     let viewModel = LocationListViewModel(useCase: locationUseCase)
     viewModel.delegate = self
 
-    let viewController = LocationListViewController()
-    viewController.viewModel = viewModel
+    let viewController = LocationListViewController(viewModel: viewModel)
 
     self.viewControllable.pushViewController(viewController, animated: true)
   }

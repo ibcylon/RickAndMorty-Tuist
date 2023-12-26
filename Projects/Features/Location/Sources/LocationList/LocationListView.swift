@@ -11,20 +11,16 @@ import Core
 
 import SnapKit
 
-final class LocationListView: UIView {
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-
-    makeUI()
-  }
+final class LocationListView: RMBaseView, CollectionRepresentable {
   
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+  let progressView: UIActivityIndicatorView = {
+    let progressView = UIActivityIndicatorView(style: .large)
+    progressView.hidesWhenStopped = true
+    return progressView
+  }()
 
   lazy var collectionView: UICollectionView = {
-    let layout = createLayout()
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .createPagingListLayout())
     collectionView.backgroundColor = .white
     collectionView.backgroundView = RMEmptyView(title: "Location")
     collectionView.refreshControl = self.refreshControl
@@ -36,25 +32,17 @@ final class LocationListView: UIView {
     return refreshControl
   }()
 
-  func makeUI() {
-    self.addSubview(collectionView)
+  override func makeUI() {
+    self.addSubViews(collectionView, progressView)
+
+    progressView.snp.makeConstraints {
+      $0.center.equalToSuperview()
+      $0.size.equalTo(100)
+    }
 
     collectionView.snp.makeConstraints {
       $0.edges.equalTo(self.safeAreaLayoutGuide)
     }
-  }
-
-  func createLayout() -> UICollectionViewLayout {
-    let layout = UICollectionViewFlowLayout()
-    let bound = UIScreen.main.bounds
-    let width = bound.width - 14 * 2
-    let height = width * (108 / 358)
-    layout.itemSize = CGSize(width: width, height: height)
-    layout.footerReferenceSize = CGSize(width: layout.collectionViewContentSize.width, height: 100)
-    layout.minimumLineSpacing = 8
-    layout.scrollDirection = .vertical
-
-    return layout
   }
 
   func stopProgress() {
