@@ -12,12 +12,30 @@ import CharacterInterface
 
 final class RegisterCoordinator: BaseCoordinator, RegisterCoordinating {
 
-  var delegate: RegisterCoordinatingDelegate?
+  weak var delegate: RegisterCoordinatingDelegate?
 
   override func start() {
     attachRegister()
+    registerFlow()
   }
   func attachRegister() {
-    
+    RMLogger.dataLogger.info("attach Register")
+  }
+
+  func detach() {
+    self.delegate?.detachRegister(self)
+  }
+
+  func registerFlow() {
+    let vc = RegisterViewController()
+    vc.delegate = self
+
+    self.viewControllable.setViewControllers([vc])
+  }
+}
+
+extension RegisterCoordinator: RegisterViewDelegate {
+  func finishLogin() {
+    detach()
   }
 }

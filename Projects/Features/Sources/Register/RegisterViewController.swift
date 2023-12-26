@@ -7,10 +7,34 @@
 
 import UIKit
 
-final class RegisterViewController: UIViewController {
-  override func viewDidLoad() {
-    super.viewDidLoad()
+import Core
 
+import RxSwift
+import RxCocoa
+
+protocol RegisterViewDelegate: AnyObject {
+  func finishLogin()
+}
+
+final class RegisterViewController: RMBaseViewController {
+  weak var delegate: RegisterViewDelegate?
+  let logoutButton = UIBarButtonItem.makeImageBarButton(type: .logout)
+
+  override func makeUI() {
     self.view.backgroundColor = .magenta
+    self.title = "Register"
+  }
+
+  override func navigationSetting() {
+    super.navigationSetting()
+    navigationItem.rightBarButtonItem = logoutButton
+  }
+
+
+  override func bindViewModel() {
+    logoutButton.rx.tap.asDriver()
+      .drive(with: self) { owner, _ in
+        owner.delegate?.finishLogin()
+      }.disposed(by: disposeBag)
   }
 }

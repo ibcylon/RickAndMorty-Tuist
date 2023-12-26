@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-protocol RegisterCoordinatingDelegate {
+protocol RegisterCoordinatingDelegate: AnyObject {
   func detachRegister(_ coordinator: Coordinator)
 }
 protocol RegisterCoordinating: Coordinator {
