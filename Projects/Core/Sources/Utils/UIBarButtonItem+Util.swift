@@ -12,6 +12,7 @@ public extension UIBarButtonItem {
     case back = "chevron.backward"
     case close = "xmark"
     case search = "magnifyingglass"
+    case logout = "rectangle.portrait.and.arrow.forward"
   }
 
   static func makeBackButton() -> UIBarButtonItem {

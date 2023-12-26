@@ -17,19 +17,27 @@ final class AppCoordinator: LaunchCoordinator, AppCoordinating {
 
   private let mainBuildable: MainBuildable
   private let registerBuildable: RegisterBuildable
+  private var options: LaunchingOption
 
   init(
     rootViewControllable: ViewControllable,
     mainBuildable: MainBuildable,
-    registerBuildable: RegisterBuildable
+    registerBuildable: RegisterBuildable,
+    options: LaunchingOption
   ) {
     self.mainBuildable = mainBuildable
     self.registerBuildable = registerBuildable
+    self.options = options
     super.init(rootViewController: rootViewControllable)
   }
 
   public override func start() {
-    mainFlow()
+    switch options {
+    case .main:
+      mainFlow()
+    case .auth:
+      registerFlow()
+    }
   }
 
   // MARK: - public
@@ -56,7 +64,6 @@ extension AppCoordinator: MainCoordinatingDelegate {
     detachChild(coordinator)
 
     AppData.needOnBoarding = true
-
     registerFlow()
   }
 }
@@ -66,7 +73,6 @@ extension AppCoordinator: RegisterCoordinatingDelegate {
     detachChild(coordinator)
 
     AppData.needOnBoarding = false
-
     mainFlow()
   }
 }

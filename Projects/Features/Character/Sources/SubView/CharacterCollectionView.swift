@@ -19,6 +19,13 @@ final class CharacterListView: RMBaseView, CharacterCollectionRepresentable {
     action: nil
   )
 
+  let logOutButton = UIBarButtonItem(
+    title: "Logout",
+    style: .plain,
+    target: nil,
+    action: nil
+  )
+
   let progressView: UIActivityIndicatorView = {
     let progressView = UIActivityIndicatorView(style: .large)
     progressView.hidesWhenStopped = true

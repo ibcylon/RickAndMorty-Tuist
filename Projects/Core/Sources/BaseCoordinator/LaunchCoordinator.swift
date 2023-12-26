@@ -15,7 +15,13 @@ public protocol URLHandling {
   func handle(_ url: URL)
 }
 
+public enum LaunchingOption {
+  case main
+  case auth
+}
+
 open class LaunchCoordinator: BaseCoordinator, LaunchCoordinating {
+
   public func launch(window: UIWindow) {
 
     window.rootViewController = self.viewControllable.uiController
