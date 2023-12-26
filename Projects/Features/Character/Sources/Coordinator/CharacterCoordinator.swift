@@ -5,7 +5,7 @@ import Domain
 
 public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating, EpisodeDetailFlow, LocationDetailFlow, BottomSheetFlow {
 
-  public var delegate: CharacterCoordinatorDelegate?
+  public weak var delegate: CharacterCoordinatorDelegate?
 
   @Injected public var characterUseCase: FetchCharacterUseCaseInterface
 
@@ -21,8 +21,18 @@ public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating,
   }
 
   public override func start() {
-    attachDetailCoordinator()
+    attach()
     characterHomeFlow()
+  }
+
+  func attach() {
+    attachDetailCoordinator()
+  }
+
+  func detach() {
+    detachDetailCoordinator()
+    self.viewControllable.setViewControllers([])
+    self.delegate?.detach(self)
   }
 
   // MARK: Private
@@ -30,8 +40,9 @@ public final class CharacterCoordinator: BaseCoordinator, CharacterCoordinating,
     let viewModel = CharacterListViewModel(useCase: characterUseCase)
 
     viewModel.delegate = self
-    let viewController = CharacterListViewController()
-    viewController.viewModel = viewModel
+    let viewController = CharacterListViewController(
+      viewModel: viewModel
+    )
 
     self.viewControllable.pushViewController(viewController, animated: true)
   }
@@ -102,8 +113,7 @@ extension CharacterCoordinator: CharacterSearchDelegate {
     self.characterDetailFlow(item)
   }
   func logout() {
-    self.viewControllable.setViewControllers([])
-    self.delegate?.detach(self)
+    self.detach()
   }
   func searchButtonTap() {
     self.characterSearchFlow()

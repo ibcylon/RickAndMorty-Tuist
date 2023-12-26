@@ -20,7 +20,7 @@ protocol EpisodeSearchDelegate: AnyObject {
 public final class EpisodeListViewModel: ViewModelType {
   private let useCase: FetchEpisodeUseCaseInterface
 
-  var delegate: EpisodeSearchDelegate?
+  weak var delegate: EpisodeSearchDelegate?
 
   init(useCase: FetchEpisodeUseCaseInterface) {
     self.useCase = useCase

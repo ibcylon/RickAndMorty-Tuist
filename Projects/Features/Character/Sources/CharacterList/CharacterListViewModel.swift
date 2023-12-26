@@ -22,7 +22,7 @@ protocol CharacterSearchDelegate: AnyObject {
 public final class CharacterListViewModel: ViewModelType {
   private let useCase: FetchCharacterUseCaseInterface
 
-  var delegate: CharacterSearchDelegate?
+  weak var delegate: CharacterSearchDelegate?
   private var disposeBag = DisposeBag()
 
   init(useCase: FetchCharacterUseCaseInterface) {
@@ -33,6 +33,7 @@ public final class CharacterListViewModel: ViewModelType {
     let onAppear: Driver<Void>
     let itemSelected: Driver<IndexPath>
     let search: Driver<Void>
+    let logout: Driver<Void>
     let paging: Driver<Void>
   }
 
@@ -86,6 +87,11 @@ extension CharacterListViewModel {
         owner.delegate?.searchButtonTap()
       })
       .disposed(by: disposeBag)
+
+    input.logout
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.logout()
+      }).disposed(by: disposeBag)
 
     let hasNextPage = store
       .map { $0?.info.next == nil ? false : true }

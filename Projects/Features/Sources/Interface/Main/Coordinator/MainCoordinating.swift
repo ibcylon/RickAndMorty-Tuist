@@ -8,7 +8,7 @@
 import Foundation
 import Core
 
-protocol MainCoordinatingDelegate {
+protocol MainCoordinatingDelegate: AnyObject {
   func detachMain(_ coordinator: Coordinator)
 }
 protocol MainCoordinating: Coordinator {

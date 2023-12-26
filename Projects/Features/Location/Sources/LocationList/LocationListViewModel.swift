@@ -20,7 +20,7 @@ protocol LocationSearchDelegate: AnyObject {
 public final class LocationListViewModel: ViewModelType {
   private let useCase: FetchLocationUseCaseInterface
 
-  var delegate: LocationSearchDelegate?
+  weak var delegate: LocationSearchDelegate?
 
   init(useCase: FetchLocationUseCaseInterface) {
     self.useCase = useCase

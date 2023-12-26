@@ -20,7 +20,7 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
   private let episodeHome: EpisodeBuildable
 
   var mainViewControllable: MainViewControllable
-  var delegate: MainCoordinatingDelegate?
+  weak var delegate: MainCoordinatingDelegate?
   
   public init(
     mainViewControllable: MainViewControllable,
@@ -46,6 +46,7 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
     attachChild(characterCoordinator)
 
     characterCoordinator.viewControllable.uiController.tabBarItem = .makeTabItem(.character)
+    characterCoordinator.delegate = self
     characterCoordinator.start()
 
     let locationCoordinator = self.locationHome.build(rootViewControllable: NavigationControllable())
@@ -71,5 +72,21 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
     ]
 
     mainViewControllable.setViewController(viewControllers)
+  }
+
+  func detachTab() {
+    self.childCoordinators.forEach { coordinator in
+      coordinator.viewControllable.setViewControllers([])
+      detachChild(coordinator)
+    }
+    self.delegate?.detachMain(self)
+  }
+}
+
+extension MainCoordinator: CharacterCoordinatorDelegate {
+  func detach(_ coordinator: Coordinator) {
+    detachChild(coordinator)
+
+    detachTab()
   }
 }
