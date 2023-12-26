@@ -6,16 +6,18 @@
 //
 
 import UIKit
+import SwiftUI
 
 import SnapKit
 import RxSwift
 import RxCocoa
+import CachedAsyncImage
 
 import CharacterInterface
 import Core
 
 class CharacterDataSourceViewController: RMBaseViewController {
-  
+
   let mainView: CharacterCollectionRepresentable
 
   init(mainView: CharacterCollectionRepresentable) {
@@ -64,6 +66,33 @@ extension CharacterDataSourceViewController {
   private func setupDataSource() {
     let cellRegistration = UICollectionView.CellRegistration<RMCharacterCollectionViewCell, RMCharacter> { cell, indexPath, item in
       cell.configure(with: .init(item))
+      cell.contentConfiguration = UIHostingConfiguration {
+        ZStack {
+          Color(.black)
+            .overlay(
+              VStack {
+                CachedAsyncImage(
+                  url: URL(string: item.image),
+                  urlCache: .imageCache
+                ) { image in
+                  image
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .clipShape(RoundedRectangle(cornerSize: CGSize.init(width: 10, height: 10)))
+                } placeholder: {
+                  ProgressView()
+                }
+
+                Text(item.status.rawValue)
+                  .fontWeight(.semibold)
+                  .foregroundStyle(.white)
+                Text(item.name)
+                  .foregroundStyle(.white)
+                Spacer()
+              }
+            )
+        }
+      }
     }
 
     let footerRegistration = UICollectionView.SupplementaryRegistration<RMFooterLoadingCollectionReusableView>(elementKind: UICollectionView.elementKindSectionFooter) { [weak self] supplementaryView, elementKind, indexPath in
