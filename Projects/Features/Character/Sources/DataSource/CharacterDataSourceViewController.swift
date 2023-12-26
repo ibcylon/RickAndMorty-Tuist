@@ -18,9 +18,9 @@ import Core
 
 class CharacterDataSourceViewController: RMBaseViewController {
 
-  let mainView: CharacterCollectionRepresentable
+  let mainView: CollectionRepresentable
 
-  init(mainView: CharacterCollectionRepresentable) {
+  init(mainView: CollectionRepresentable) {
     self.mainView = mainView
     super.init()
   }

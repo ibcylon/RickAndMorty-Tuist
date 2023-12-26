@@ -11,7 +11,7 @@ import Core
 
 import SnapKit
 
-final class CharacterSearchView: RMBaseView, CharacterCollectionRepresentable {
+final class CharacterSearchView: RMBaseView, CollectionRepresentable {
 
   private(set) lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()

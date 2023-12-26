@@ -11,12 +11,7 @@ import Core
 
 import SnapKit
 
-protocol CharacterCollectionRepresentable: UIView {
-  var progressView: UIActivityIndicatorView { get }
-  var collectionView: UICollectionView { get }
-}
-
-final class CharacterDataSourceView: RMBaseView, CharacterCollectionRepresentable {
+final class CharacterDataSourceView: RMBaseView, CollectionRepresentable {
 
   let progressView: UIActivityIndicatorView = {
     let progressView = UIActivityIndicatorView(style: .large)

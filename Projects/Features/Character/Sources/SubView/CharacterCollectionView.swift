@@ -10,7 +10,7 @@ import UIKit
 import Core
 import SnapKit
 
-final class CharacterListView: RMBaseView, CharacterCollectionRepresentable {
+final class CharacterListView: RMBaseView, CollectionRepresentable {
 
   let searchButton = UIBarButtonItem(
     title: "Search",
