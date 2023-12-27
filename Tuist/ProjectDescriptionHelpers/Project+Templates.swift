@@ -1,18 +1,19 @@
 import ProjectDescription
 import MyPlugin
 
-private let basicDeployment: DeploymentTarget = .iOS(targetVersion: "16.2", devices: .iphone)
 public extension Project {
+  
    static func dynamicFramework(
     name: String,
+    productType: Product = .framework,
     dependencies: [TargetDependency]
   ) -> Project {
     let target = Target(
         name: name,
         platform: .iOS,
-        product: .framework,
+        product: productType,
         bundleId: "com.rickandmorty.\(name)",
-        deploymentTarget: basicDeployment,
+        deploymentTarget: EnvironmentHelpers.basicDeployment,
         infoPlist: .default,
         sources: ["Sources/**/*.swift"],
         resources:  [.glob(pattern: .relativeToRoot("Projects/App/Resources/**"))],
@@ -35,7 +36,7 @@ public extension Project {
        platform: .iOS,
        product: product,
        bundleId: "com.rickandmorty.\(name)",
-       deploymentTarget: basicDeployment,
+       deploymentTarget: EnvironmentHelpers.basicDeployment,
        infoPlist: .default,
        sources: ["Sources/**/*.swift"],
        resources:  [.glob(pattern: .relativeToRoot("Projects/App/Resources/**"))],

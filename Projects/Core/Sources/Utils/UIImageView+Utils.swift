@@ -9,7 +9,7 @@ import UIKit
 
 public extension UIImageView {
   func setImage(url: String) {
-    setImage(url: URL(string: url)!)
+    setImage(url: URL(string: url))
   }
 
   func setImage(url: URL?) {

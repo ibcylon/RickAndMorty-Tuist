@@ -16,6 +16,7 @@ public enum Feature: String {
   case App = "App"
   case Data = "Data"
   case Domain = "Domain"
+  case BaseTest = "BaseTest"
 
   case Networks
   case ThirdPartyLibs
@@ -34,6 +35,7 @@ public enum ModulePath {
     case Networks
     case ThirdPartyLibs
     case DesignSystem
+    case BaseTest
   }
 
   var name: String {
@@ -59,6 +61,9 @@ public enum External: String {
   case RxCocoa
   case SnapKit
   case CachedAsyncImage
+  case RxTest
+  case RxBlocking
+  case RxRelay
 }
 
 public extension TargetDependency {
@@ -88,6 +93,10 @@ public extension TargetDependency {
     .feature(implementation: moduleName.rawValue)
   }
 
+  static func feature(testing moduleName: Feature) -> TargetDependency {
+    .feature(target: moduleName.rawValue + "Testing", featureName: moduleName.rawValue)
+  }
+
   // MARK: Module
 
   private static func module(target: String, pathName: String) -> TargetDependency {
@@ -104,7 +113,14 @@ public extension TargetDependency {
   static var core: ProjectDescription.TargetDependency {
     .module(implementation: .Core, pathName: .Core)
   }
+
+  static var data: ProjectDescription.TargetDependency {
+    .module(implementation: .Data, pathName: .Data)
+  }
   static var domain: TargetDependency {
     .module(implementation: .Domain, pathName: .Domain)
+  }
+  static var baseTest: TargetDependency {
+    .module(implementation: .BaseTest, pathName: .Modules(.BaseTest))
   }
 }

@@ -14,6 +14,7 @@ let project = Project(
   targets: [
     .feature(
       implementation: .Core,
+      productType: .framework,
       dependencies: [
         .module(implementation: .ThirdPartyLibs, pathName: .Modules(.ThirdPartyLibs)),
         .module(implementation: .Networks, pathName: .Modules(.Networks)),

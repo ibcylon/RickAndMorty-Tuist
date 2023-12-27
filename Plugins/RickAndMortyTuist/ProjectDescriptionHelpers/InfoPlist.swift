@@ -34,3 +34,33 @@ public let infoPlistExtension: [String: InfoPlist.Value] = [
 //    ],
     "UIUserInterfaceStyle": "Dark"
 ]
+
+
+public func appInfoPlistExtension(name: String = EnvironmentHelpers.appName) -> [String: InfoPlist.Value] {
+  [
+    "CFBundleShortVersionString": "1.0",
+    "CFBundleVersion": "1",
+    "UILaunchStoryboardName": "LaunchScreen",
+    "CFBundleName": "\(name)",
+
+    "UIApplicationSceneManifest": [
+      "UIApplicationSupportsMultipleScenes": false,
+      "UISceneConfigurations": [
+        "UIWindowSceneSessionRoleApplication": [
+          [
+            "UISceneConfigurationName": "Default Configuration",
+            "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+          ],
+        ]
+      ]
+    ],
+    "App Transport Security Settings": ["Allow Arbitrary Loads": true],
+    "UIUserInterfaceStyle": "Dark",
+
+    // MARK: Font 추가
+    "UIAppFonts": [
+      //      "Item 0": "Pretendard-Medium.otf",
+
+    ],
+  ]
+}

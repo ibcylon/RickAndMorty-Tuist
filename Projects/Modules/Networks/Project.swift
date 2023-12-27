@@ -11,6 +11,7 @@ import MyPlugin
 
 let project = Project.dynamicFramework(
   name: Feature.Networks.rawValue,
+  productType: .framework,
   dependencies: [
     
   ]

@@ -23,6 +23,29 @@ let project = Project(
             dependencies: [
               .domain
             ]
+        ),
+        .feature(
+          demo: .Character,
+          dependencies: [
+            .feature(implementation: .Character),
+            .feature(testing: .Character),
+            .data
+          ]
+        ),
+        .feature(
+          unitTest: .Character,
+          dependencies: [
+            .baseTest,
+            .feature(testing: .Character),
+            .feature(implementation: .Character)
+          ]
+        ),
+
+        .feature(
+          testing: .Character,
+          dependencies: [
+            .feature(interface: .Character)
+          ]
         )
     ]
 )

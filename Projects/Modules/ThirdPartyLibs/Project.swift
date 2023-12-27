@@ -16,5 +16,6 @@ let project = Project.library(
     .external(.SnapKit),
     .external(.RxCocoa),
     .external(.CachedAsyncImage)
-  ]
+  ],
+  product: .framework
 )

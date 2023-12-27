@@ -37,6 +37,7 @@ public extension Target {
 
   static func makeFramework(
     name: String,
+    productType: Product,
     sources: ProjectDescription.SourceFilesList,
     dependencies: [ProjectDescription.TargetDependency] = [],
     resources: ProjectDescription.ResourceFileElements? = []
@@ -44,7 +45,7 @@ public extension Target {
     Target(
       name: name,
       platform: .iOS,
-      product: defaultPackageType,
+      product: productType,
       bundleId: makeBundleID(with: name + ".framework"),
       deploymentTarget: basicDeployment,
       sources: sources,
@@ -55,11 +56,13 @@ public extension Target {
 
   private static func feature(
     implementation featureName: String,
+    productType: Product,
     dependencies: [ProjectDescription.TargetDependency] = [],
     resources: ProjectDescription.ResourceFileElements? = []
   ) -> Target {
     .makeFramework(
       name: featureName,
+      productType: productType,
       sources: [ "Sources/**" ],
       dependencies: dependencies,
       resources: resources
@@ -73,6 +76,7 @@ public extension Target {
   ) -> Target {
     .makeFramework(
       name: featureName + "Interface",
+      productType: .framework,
       sources: [ "Interface/Sources/**" ],
       dependencies: dependencies,
       resources: resources
@@ -81,11 +85,13 @@ public extension Target {
 
   static func feature(
     implementation featureName: Feature,
+    productType: Product = .staticLibrary,
     dependencies: [ProjectDescription.TargetDependency] = [],
     resources: ProjectDescription.ResourceFileElements? = []
   ) -> Target {
     .feature(
       implementation: featureName.rawValue,
+      productType: productType,
       dependencies: dependencies,
       resources: resources
     )
@@ -107,6 +113,7 @@ public extension Target {
   ) -> Target {
     .makeFramework(
       name: "Feature",
+      productType: .staticLibrary,
       sources: "Sources/**",
       dependencies: dependencies
     )

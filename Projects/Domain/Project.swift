@@ -14,6 +14,7 @@ let project = Project(
   targets: [
     .feature(
       implementation: .Domain,
+      productType: .framework,
       dependencies: [
         .feature(interface: .Character),
         .feature(interface: .Location),
