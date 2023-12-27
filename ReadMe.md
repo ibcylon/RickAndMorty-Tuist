@@ -8,6 +8,7 @@ Tuist - uFeature Architecture 적용해보는 프로젝트
 ### 데모
 ![RickAndMorty GIF](https://github.com/ibcylon/RickAndMorty-Tuist/assets/25360781/28804c99-97a1-4b9a-b7f5-1b1c9c0b8e34)
 ![Simulator Screen Recording - iPhone 15 - 2023-12-27 at 10 27 15](https://github.com/ibcylon/RickAndMorty-Tuist/assets/25360781/d8d04059-bec5-4f58-88d6-6f7e0397acbb)
+![Demo](https://github.com/ibcylon/RickAndMorty-Tuist/assets/25360781/7f7475a0-f8d6-4841-a920-26621d257b5a)
 ### 요구사항
 
 - 필터 검색
