@@ -17,6 +17,8 @@ Tuist - uFeature Architecture 적용해보는 프로젝트
 ## 아키텍처
 Clean Architecture Layer인 Data / Domain / Presentation의 구조를 uFeature(마이크로 피처) 아키텍처로 적용하였습니다.
 
+## Dependency graph
+![RickAndMorty GIF](/graph.png)
 ## 개발하면서 고려한 사항
 
 ### uFeature Modular
