@@ -21,10 +21,11 @@ Tuist - uFeature Architecture 적용해보는 프로젝트
 - 모듈화를 통해 개발 병목을 없애고 loose coupled한 모듈을 개발합니다.
 - MVVM 패턴을 사용하여 뷰와 뷰로직을 분리하였습니다.
 ### RxSwift 반응형 프로그래밍
-- 직관적인 비동기 처리를 하였습니다.
+- 직관적인 비동기 처리를 위해 사용함.
 ### Tuist
 - uFeature Modular Mono Repo를 구현합니다.
 - Feature Demo앱을 구현합니다.
+- pbxproj 충돌을 없앱니다.
 
 ## Dependency graph
 ![RickAndMorty GIF](/graph.png)
