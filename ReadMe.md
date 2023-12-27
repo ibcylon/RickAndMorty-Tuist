@@ -14,8 +14,17 @@ Tuist - uFeature Architecture 적용해보는 프로젝트
 - Paging
 - 다른 피처 화면 사용
 - 레지스터와 메인 탭 Flow 분기
-## 아키텍처
-Clean Architecture Layer인 Data / Domain / Presentation의 구조를 uFeature(마이크로 피처) 아키텍처로 적용하였습니다.
+### Clean Architecture + uFeature Modular 아키텍처
+- Data Layer를 분리하여 Data 변화에 대한 종속성을 낮췄습니다. Feature Repository 구현합니다.
+- Feature Interface: Domain Model, <<UseCase>> <<Repository>>, <<Builder>>, <<Coordinator>>를 책임집니다.
+- Feature: Presentation과 UseCase, Builder, Coordinator를 구현합니다.
+- 모듈화를 통해 개발 병목을 없애고 loose coupled한 모듈을 개발합니다.
+- MVVM 패턴을 사용하여 뷰와 뷰로직을 분리하였습니다.
+### RxSwift 반응형 프로그래밍
+- 직관적인 비동기 처리를 하였습니다.
+### Tuist
+- uFeature Modular Mono Repo를 구현합니다.
+- Feature Demo앱을 구현합니다.
 
 ## Dependency graph
 ![RickAndMorty GIF](/graph.png)
