@@ -12,10 +12,7 @@ import LocationInterface
 
 import SnapKit
 
-
-
-final class LocationListCell: UICollectionViewCell, AbstarctCellType  {
-  typealias I = RMLocation
+final class LocationListCell: BaseDiffableCell<RMLocation>  {
 
   private lazy var vStackView: UIStackView = {
     let stackView = UIStackView()
@@ -73,7 +70,7 @@ final class LocationListCell: UICollectionViewCell, AbstarctCellType  {
       $0.trailing.bottom.equalToSuperview().offset(-10)
     }
   }
-  func bind(_ item: RMLocation) {
+  override func bind(_ item: RMLocation) {
     self.nameLabel.text = item.name
     self.dimensionLabel.text = item.dimension
     self.typeLabel.text = item.type

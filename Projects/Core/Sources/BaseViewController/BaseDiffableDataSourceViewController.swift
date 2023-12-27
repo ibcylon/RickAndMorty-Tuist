@@ -1,6 +1,6 @@
 //
-//  LocationDataSourceViewController.swift
-//  LocationInterface
+//  BaseDiffableViewController.swift
+//  Core
 //
 //  Created by Kanghos on 2023/12/26.
 //
@@ -13,35 +13,32 @@ import RxSwift
 import RxCocoa
 import CachedAsyncImage
 
-import LocationInterface
-import Core
+open class BaseDiffableDataSourceViewController<CellType, ModelType>: RMBaseViewController where CellType: BaseDiffableCell<ModelType>, ModelType: Hashable {
 
-class DataSourceViewController<CellType, ModelType>: RMBaseViewController where CellType: UICollectionViewCell, CellType: AbstarctCellType, CellType.I == ModelType, ModelType: Hashable {
+  public let mainView: CollectionRepresentable
 
-  let mainView: CollectionRepresentable
-
-  init(mainView: CollectionRepresentable) {
+  public init(mainView: CollectionRepresentable) {
     self.mainView = mainView
     super.init()
   }
 
-  required init?(coder: NSCoder) {
+  public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
   fileprivate var dataSource: DataSource!
-  let hasNextPageRelay = BehaviorRelay<Bool>(value: false)
+  public let hasNextPageRelay = BehaviorRelay<Bool>(value: false)
 
-  override func loadView() {
+  public override func loadView() {
     self.view = mainView
   }
 
-  override func bindViewModel() {
+  open override func bindViewModel() {
     setupDataSource()
   }
 }
 
-extension DataSourceViewController {
+extension BaseDiffableDataSourceViewController {
   typealias DataSource = UICollectionViewDiffableDataSource<Section, ModelType>
   typealias Snapshot = NSDiffableDataSourceSnapshot<Section, ModelType>
 
@@ -53,11 +50,12 @@ extension DataSourceViewController {
     self.hasNextPageRelay.value
   }
 
-  var pagingTrigger: Driver<Void> {
+  public var pagingTrigger: Driver<Void> {
     self.mainView.collectionView.rx.didEndDecelerating
       .asDriver()
       .filter { [weak self] in
         guard let self = self else { return false }
+        RMLogger.dataLogger.info("pagingTrigger")
         return self.mainView.collectionView.needMorePage
       }
   }
@@ -87,16 +85,16 @@ extension DataSourceViewController {
     var initialSnapshot = Snapshot()
     initialSnapshot.appendSections([.main])
     initialSnapshot.appendItems([])
-    dataSource.apply(initialSnapshot)
+    dataSource.apply(initialSnapshot, animatingDifferences: false)
   }
 
-  func refreshDataSource(_ items: [CellType.I]) {
+  public func refreshDataSource(_ items: [CellType.I]) {
     var snapshot = self.dataSource.snapshot()
     snapshot.appendItems(items)
-    self.dataSource.apply(snapshot)
+    self.dataSource.apply(snapshot, animatingDifferences: false)
   }
 
-  func bindDataSource(_ items: [CellType.I]) {
+  public func bindDataSource(_ items: [CellType.I]) {
     var snapshot = Snapshot()
     snapshot.appendSections([.main])
     snapshot.appendItems(items, toSection: .main)

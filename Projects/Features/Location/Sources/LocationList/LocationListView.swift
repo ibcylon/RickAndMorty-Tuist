@@ -23,7 +23,7 @@ final class LocationListView: RMBaseView, CollectionRepresentable {
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: .createPagingListLayout())
     collectionView.backgroundColor = .white
     collectionView.backgroundView = RMEmptyView(title: "Location")
-    collectionView.refreshControl = self.refreshControl
+//    collectionView.refreshControl = self.refreshControl
     return collectionView
   }()
 
@@ -43,13 +43,5 @@ final class LocationListView: RMBaseView, CollectionRepresentable {
     collectionView.snp.makeConstraints {
       $0.edges.equalTo(self.safeAreaLayoutGuide)
     }
-  }
-
-  func stopProgress() {
-    refreshControl.endRefreshing()
-  }
-
-  func startProgress() {
-    
   }
 }

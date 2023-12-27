@@ -10,7 +10,7 @@ import UIKit
 import Core
 import SnapKit
 
-final class EpisodeListView: RMBaseView {
+final class EpisodeListView: RMBaseView, CollectionRepresentable {
 
   lazy var progressView: UIActivityIndicatorView = {
     let progressView = UIActivityIndicatorView(style: .large)

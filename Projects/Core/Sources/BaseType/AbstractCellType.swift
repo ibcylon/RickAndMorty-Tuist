@@ -13,7 +13,7 @@ public protocol AbstarctCellType {
   func bind(_ item: I)
 }
 
-public class BaseDiffableCell<I>: UICollectionViewCell, AbstarctCellType where I: Hashable {
+open class BaseDiffableCell<I>: UICollectionViewCell, AbstarctCellType where I: Hashable {
   public typealias Item = I
-  open func bind(_ items: Item) { }
+  open func bind(_ item: Item) { }
 }

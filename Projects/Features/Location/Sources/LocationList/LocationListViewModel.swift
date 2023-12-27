@@ -19,7 +19,7 @@ protocol LocationSearchDelegate: AnyObject {
 
 public final class LocationListViewModel: ViewModelType {
   private let useCase: FetchLocationUseCaseInterface
-
+  private var disposeBag = DisposeBag()
   weak var delegate: LocationSearchDelegate?
 
   init(useCase: FetchLocationUseCaseInterface) {
@@ -33,7 +33,6 @@ public final class LocationListViewModel: ViewModelType {
   }
 
   public struct Output {
-    let route: Disposable
     let LocationArray: Driver<[RMLocation]>
     let hasNextPage: Driver<Bool>
   }
@@ -50,7 +49,8 @@ extension LocationListViewModel {
       .map { _ in }
 
     let pagingTrigger = input.paging
-      .debounce(.seconds(1))
+      .debounce(.milliseconds(300))
+      .debug("debounced pagingTrigger")
 
     let addedList = Driver.merge(pagingTrigger, onAppear)
       .withLatestFrom(store.asDriver())
@@ -73,7 +73,7 @@ extension LocationListViewModel {
         return info.results
       }
 
-    let route = input.buttonTap
+    input.buttonTap
       .withLatestFrom(loadedList.asDriver()) { indexPath, array in
         RMLogger.dataLogger.debug("\(indexPath)")
         RMLogger.dataLogger.debug("\(array.count)")
@@ -81,23 +81,15 @@ extension LocationListViewModel {
       }
       .drive(with: self, onNext: { owner, item in
         owner.delegate?.presentItem(item)
-      })
+      }).disposed(by: disposeBag)
 
     let hasNextPage = store
       .map { $0?.info.next == nil ? false : true }
       .asDriver(onErrorJustReturn: false)
 
     return Output(
-      route: route,
       LocationArray: addedList,
       hasNextPage: hasNextPage
     )
-  }
-}
-
-extension ObservableType {
-  func flatMapLatest<A: AnyObject, O: ObservableType>(weak obj: A, selector: @escaping (A, Self.Element) throws -> O) -> Observable<O.Element> {
-    return flatMapLatest { [weak obj] value -> Observable<O.Element> in
-      try obj.map { try selector($0, value).asObservable() } ?? .empty() }
   }
 }

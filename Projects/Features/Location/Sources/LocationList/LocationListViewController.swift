@@ -15,7 +15,7 @@ import LocationInterface
 
 import Core
 
-final class LocationListViewController: DataSourceViewController<LocationListCell, RMLocation> {
+final class LocationListViewController: BaseDiffableDataSourceViewController<LocationListCell, LocationListCell.Item> {
   private let viewModel: LocationListViewModel
 
   init(viewModel: LocationListViewModel!) {
@@ -37,20 +37,21 @@ final class LocationListViewController: DataSourceViewController<LocationListCel
 
     let input = LocationListViewModel.Input(
       onAppear: self.rx.viewWillAppear.map { _ in }.asDriver(onErrorDriveWith: .empty()),
-      buttonTap: self.mainView.collectionView.rx.itemSelected.asDriver(),
+      buttonTap: self.mainView.collectionView.rx.itemSelected.asDriver().debug("Item"),
       paging: pagingTrigger
+        .debug("paging")
     )
 
     let output = viewModel.transform(input: input)
+
     output.LocationArray
       .drive(with: self, onNext: { owner, items in
+        RMLogger.dataLogger.debug("location items count: \(items.count)")
         owner.refreshDataSource(items)
       }).disposed(by: disposeBag)
 
-    output.route
-      .disposed(by: disposeBag)
-
     output.hasNextPage
+      .debug("location NextPage")
       .drive(hasNextPageRelay)
       .disposed(by: disposeBag)
   }

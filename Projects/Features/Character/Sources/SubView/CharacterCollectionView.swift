@@ -49,7 +49,8 @@ final class CharacterListView: RMBaseView, CollectionRepresentable {
     }
 
     collectionView.snp.makeConstraints {
-      $0.edges.equalTo(safeAreaLayoutGuide)
+      $0.top.equalToSuperview()
+      $0.leading.trailing.bottom.equalTo(safeAreaLayoutGuide)
     }
   }
 }

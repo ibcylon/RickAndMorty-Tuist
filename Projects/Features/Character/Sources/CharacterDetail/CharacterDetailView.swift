@@ -11,7 +11,7 @@ import CharacterInterface
 import Core
 import SnapKit
 
-final class CharacterDetailView: RMBaseView {
+final class CharacterDetailView: RMBaseView, CollectionRepresentable {
   private(set) lazy var backButton = UIBarButtonItem(
     image: UIImage(systemName: "chevron.backward"),
     style: .plain,
@@ -36,7 +36,13 @@ final class CharacterDetailView: RMBaseView {
     return button
   }()
 
-  lazy var episodeCollectionView: UICollectionView = {
+  let progressView: UIActivityIndicatorView = {
+    let progressView = UIActivityIndicatorView(style: .large)
+    progressView.hidesWhenStopped = true
+    return progressView
+  }()
+
+  lazy var collectionView: UICollectionView = {
     let layout: UICollectionViewFlowLayout = .createGridLayout(ratio: 0.8)
     layout.scrollDirection = .horizontal
     let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -45,7 +51,7 @@ final class CharacterDetailView: RMBaseView {
   }()
 
   override func makeUI() {
-    self.addSubViews(imageView, locationButton, episodeCollectionView)
+    self.addSubViews(imageView, locationButton, collectionView, progressView)
 
     imageView.snp.makeConstraints {
       $0.top.leading.trailing.equalTo(self.safeAreaLayoutGuide).inset(15)
@@ -57,8 +63,13 @@ final class CharacterDetailView: RMBaseView {
       $0.height.equalTo(50)
     }
 
-    episodeCollectionView.setContentHuggingPriority(.defaultLow, for: .vertical)
-    episodeCollectionView.snp.makeConstraints {
+    progressView.snp.makeConstraints {
+      $0.center.equalToSuperview()
+      $0.size.equalTo(100)
+    }
+
+    collectionView.setContentHuggingPriority(.defaultLow, for: .vertical)
+    collectionView.snp.makeConstraints {
       $0.top.equalTo(locationButton.snp.bottom).offset(10)
       $0.leading.trailing.equalToSuperview()
       $0.bottom.equalTo(safeAreaLayoutGuide)

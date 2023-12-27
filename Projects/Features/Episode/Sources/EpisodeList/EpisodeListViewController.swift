@@ -14,16 +14,18 @@ import RxCocoa
 import EpisodeInterface
 import Core
 
-final class EpisodeListViewController: RMBaseViewController {
+final class EpisodeListViewController: BaseDiffableDataSourceViewController<RMEpisodeCollectionViewCell, RMEpisodeCollectionViewCell.Item> {
 
-  private let mainView = EpisodeListView()
-  var viewModel: EpisodeListViewModel!
+  private let viewModel: EpisodeListViewModel
 
-  fileprivate var dataSource: DataSource!
-  fileprivate let hasNextPageRelay = BehaviorRelay<Bool>(value: false)
-
-  override func loadView() {
-    self.view = mainView
+  init(viewModel: EpisodeListViewModel) {
+    self.viewModel = viewModel
+    let mainView = EpisodeListView()
+    super.init(mainView: mainView)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func makeUI() {
@@ -31,7 +33,7 @@ final class EpisodeListViewController: RMBaseViewController {
   }
 
   override func bindViewModel() {
-    setupDataSource()
+    super.bindViewModel()
 
     let pagingTrigger = self.mainView.collectionView.rx.didScroll
       .filter { self.mainView.collectionView.needMorePage }
@@ -62,47 +64,5 @@ final class EpisodeListViewController: RMBaseViewController {
     output.hasNextPage
       .drive(hasNextPageRelay)
       .disposed(by: disposeBag)
-  }
-}
-
-extension EpisodeListViewController {
-  typealias DataSource = UICollectionViewDiffableDataSource<EpisodeSection, RMEpisode>
-  typealias Snapshot = NSDiffableDataSourceSnapshot<EpisodeSection, RMEpisode>
-
-  enum EpisodeSection: Hashable {
-    case main
-  }
-  // MARK: - Private
-  private func setupDataSource() {
-    let cellRegistration = UICollectionView.CellRegistration<RMEpisodeCollectionViewCell, RMEpisode> { cell, indexPath, item in
-      cell.configure(with: item)
-    }
-
-    let footerRegistration = UICollectionView.SupplementaryRegistration<RMFooterLoadingCollectionReusableView>(elementKind: UICollectionView.elementKindSectionFooter) { [weak self] supplementaryView, elementKind, indexPath in
-      if self?.hasNextPageRelay.value == true {
-        supplementaryView.startAnimating()
-      } else {
-        supplementaryView.stopAnimationg()
-      }
-    }
-
-    dataSource = UICollectionViewDiffableDataSource(collectionView: mainView.collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-      return collectionView.dequeueConfiguredReusableCell(using: cellRegistration, for: indexPath, item: itemIdentifier)
-    })
-
-    dataSource.supplementaryViewProvider = { (view, kind, index) in
-      return view.dequeueConfiguredReusableSupplementary(using: footerRegistration, for: index)
-    }
-
-    var initialSnapshot = Snapshot()
-    initialSnapshot.appendSections([.main])
-    initialSnapshot.appendItems([])
-    dataSource.apply(initialSnapshot)
-  }
-
-  fileprivate func refreshDataSource(_ items: [RMEpisode]) {
-    var snapshot = self.dataSource.snapshot()
-    snapshot.appendItems(items)
-    self.dataSource.apply(snapshot)
   }
 }

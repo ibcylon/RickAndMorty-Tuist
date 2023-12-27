@@ -11,7 +11,7 @@ import Core
 
 import SnapKit
 
-public final class RMEpisodeCollectionViewCell: UICollectionViewCell {
+public final class RMEpisodeCollectionViewCell: BaseDiffableCell<RMEpisode> {
 
   private lazy var nameLabel: UILabel = {
     let label = UILabel()
@@ -88,9 +88,9 @@ public final class RMEpisodeCollectionViewCell: UICollectionViewCell {
     contentView.layer.shadowOpacity = 0.3
   }
 
-  public func configure(with viewModel: RMEpisode) {
-    self.nameLabel.text = viewModel.name
-    self.episodeLabel.text = viewModel.episode
-    self.airDateLabel.text = viewModel.airDate
+  public override func bind(_ item: BaseDiffableCell<RMEpisode>.Item) {
+    self.nameLabel.text = item.name
+    self.episodeLabel.text = item.episode
+    self.airDateLabel.text = item.airDate
   }
 }

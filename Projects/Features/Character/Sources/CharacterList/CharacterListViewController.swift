@@ -29,10 +29,6 @@ final class CharacterListViewController: CharacterDataSourceViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override func makeUI() {
-    self.title = "Characters"
-  }
-
   private let searchButton = UIBarButtonItem.makeSearchButton()
   private let logoutButton = UIBarButtonItem.makeImageBarButton(type: .logout)
 
@@ -40,6 +36,7 @@ final class CharacterListViewController: CharacterDataSourceViewController {
     super.navigationSetting()
     navigationItem.rightBarButtonItem = searchButton
     navigationItem.rightBarButtonItems?.append(logoutButton)
+    navigationItem.title = "Characters"
   }
 
   override func bindViewModel() {

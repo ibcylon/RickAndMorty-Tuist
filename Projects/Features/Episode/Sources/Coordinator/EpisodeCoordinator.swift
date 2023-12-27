@@ -55,8 +55,7 @@ public final class EpisodeCoordinator: BaseCoordinator, EpisodeCoordinating {
     let viewModel = EpisodeListViewModel(useCase: episodeUseCase)
 
     viewModel.delegate = self
-    let viewController = EpisodeListViewController()
-    viewController.viewModel = viewModel
+    let viewController = EpisodeListViewController(viewModel: viewModel)
 
     self.viewControllable.pushViewController(viewController, animated: true)
   }
