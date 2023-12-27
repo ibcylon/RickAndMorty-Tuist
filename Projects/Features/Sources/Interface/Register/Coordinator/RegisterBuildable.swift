@@ -9,5 +9,5 @@ import UIKit
 import Core
 
 protocol RegisterBuildable {
-  func build(rootViewControllable: ViewControllable) -> RegisterCoordinating
+  func build() -> RegisterCoordinating
 }

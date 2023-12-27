@@ -18,7 +18,7 @@ public final class AppRootBuilder: AppRootBuildable {
 
   public func build() -> LaunchCoordinating {
 
-    let rootViewController = NavigationControllable(rootViewControllable: RMLaunchViewController())
+    let rootViewController = RMLaunchViewController()
     var option: LaunchingOption {
       AppData.needOnBoarding ? LaunchingOption.auth : LaunchingOption.main
     }

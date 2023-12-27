@@ -9,5 +9,5 @@ import UIKit
 import Core
 
 protocol MainBuildable {
-  func build(rootViewControllable: ViewControllable) -> MainCoordinating
+  func build() -> MainCoordinating
 }

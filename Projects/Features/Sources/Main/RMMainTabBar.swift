@@ -54,8 +54,6 @@ final class RMTabBarController: UITabBarController, MainViewControllable {
   func setViewController(_ viewControllers: [Core.ViewControllable]) {
     super.setViewControllers(viewControllers.map(\.uiController), animated: true)
   }
-
-
 }
 
 extension UITabBarItem {

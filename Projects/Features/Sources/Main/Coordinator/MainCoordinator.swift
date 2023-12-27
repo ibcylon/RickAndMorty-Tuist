@@ -37,6 +37,7 @@ final class MainCoordinator: BaseCoordinator, MainCoordinating {
   }
 
   override func start() {
+    replaceWindowRootViewController(rootViewController: mainViewControllable)
     attachTab()
   }
 

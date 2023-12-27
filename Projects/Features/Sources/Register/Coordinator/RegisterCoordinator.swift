@@ -16,10 +16,11 @@ final class RegisterCoordinator: BaseCoordinator, RegisterCoordinating {
 
   override func start() {
     attachRegister()
-    registerFlow()
   }
+
   func attachRegister() {
-    RMLogger.dataLogger.info("attach Register")
+    replaceWindowRootViewController(rootViewController: self.viewControllable)
+    registerFlow()
   }
 
   func detach() {
@@ -30,7 +31,7 @@ final class RegisterCoordinator: BaseCoordinator, RegisterCoordinating {
     let vc = RegisterViewController()
     vc.delegate = self
 
-    self.viewControllable.setViewControllers([vc])
+    self.viewControllable.setViewControllers([vc]) 
   }
 }
 

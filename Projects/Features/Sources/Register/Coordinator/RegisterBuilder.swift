@@ -11,8 +11,10 @@ import Core
 import Character
 
 public final class RegisterBuilder: RegisterBuildable {
-  func build(rootViewControllable: Core.ViewControllable) -> RegisterCoordinating {
-    let coordinator = RegisterCoordinator(rootViewController: rootViewControllable)
+  func build() -> RegisterCoordinating {
+
+    let navigation = NavigationControllable()
+    let coordinator = RegisterCoordinator(rootViewController: navigation)
 
     return coordinator
   }

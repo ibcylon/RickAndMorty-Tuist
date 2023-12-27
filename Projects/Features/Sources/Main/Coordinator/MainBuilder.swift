@@ -17,7 +17,7 @@ import Episode
 public final class MainBuilder: MainBuildable {
   public init() { }
 
-  func build(rootViewControllable: Core.ViewControllable) -> MainCoordinating {
+  func build() -> MainCoordinating {
     let tabBar = RMTabBarController()
 
     let detailBuilder = DetailBuilder()
@@ -25,8 +25,6 @@ public final class MainBuilder: MainBuildable {
     let characterHome = CharacterBuilder(detailBuildable: detailBuilder)
     let locationHome = LocationBuilder(detailBuildable: detailBuilder)
     let episodeHome = EpisodeBuilder(detailBuildable: detailBuilder)
-
-    rootViewControllable.setViewControllers([tabBar])
 
     let coordinator = MainCoordinator(
       mainViewControllable: tabBar,

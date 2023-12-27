@@ -42,7 +42,8 @@ final class AppCoordinator: LaunchCoordinator, AppCoordinating {
 
   // MARK: - public
   func registerFlow() {
-    let registerCoordinator = self.registerBuildable.build(rootViewControllable: self.viewControllable)
+
+    let registerCoordinator = self.registerBuildable.build()
     attachChild(registerCoordinator)
     registerCoordinator.delegate = self
 
@@ -50,7 +51,9 @@ final class AppCoordinator: LaunchCoordinator, AppCoordinating {
   }
 
   func mainFlow() {
-    let mainCoordinator = mainBuildable.build(rootViewControllable: self.viewControllable)
+
+
+    let mainCoordinator = mainBuildable.build()
 
     attachChild(mainCoordinator)
     mainCoordinator.delegate = self

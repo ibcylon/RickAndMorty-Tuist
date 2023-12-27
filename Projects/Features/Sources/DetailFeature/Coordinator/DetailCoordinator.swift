@@ -35,8 +35,7 @@ public final class DetailCoordinator: BaseCoordinator, DetailCoordinating {
       item: item)
     viewModel.delegate = self
 
-    let viewController = CharacterDetailViewController()
-    viewController.viewModel = viewModel
+    let viewController = CharacterDetailViewController(viewModel: viewModel)
 
     self.viewControllable.pushViewController(viewController, animated: true)
   }

@@ -13,7 +13,7 @@ public extension UIScrollView {
     let totalContentHeight = self.contentSize.height
     let totalScrollViewFixedHeight = self.frame.size.height
 
-    if offset >= (totalContentHeight - totalScrollViewFixedHeight) {
+    if offset >= (totalContentHeight - totalScrollViewFixedHeight) - 10 {
       return true
     }
     return false
